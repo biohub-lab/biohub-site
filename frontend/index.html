@@ -1,40 +1,101 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#022E2D">
+    <meta name="description" content="Acesse a Área da Liga BioHub.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
-    <title>Biohub</title>
+    <title>Área da Liga - BioHub</title>
 </head>
 <body>
-    
-    <main id="main">
+    <div class="topbar">
+        <span class="status-dot" aria-hidden="true"></span>
+        <strong>BioHub</strong>
+        <span class="topbar-description">Liga Acadêmica de Biotecnologia</span>
+    </div>
 
-        <section id="login">
-            <div id="login-panel">
-                <div id="logo">
-                    <img src="assets/logo.png" width="100" alt="Logo Biohub">
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="BioHub">
+            <img src="./assets/logo.png" alt="" class="brand-logo">
+            <span class="brand-name">BioHub</span>
+        </a>
+        <span class="header-label">Área da Liga</span>
+    </header>
+
+    <main class="login-page">
+        <section class="login-card" aria-labelledby="login-title">
+            <div class="card-heading">
+                <span class="lock-badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="10" width="16" height="11" rx="2.5"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                    </svg>
+                </span>
+                <p class="eyebrow">Só para membros</p>
+                <h1 id="login-title">Área da Liga</h1>
+                <p class="intro">Entre com sua matrícula para acessar o espaço dos membros da BioHub.</p>
+            </div>
+
+            <form id="login-form" novalidate>
+                <div id="login-message" class="login-alert" role="alert" aria-live="assertive" aria-atomic="true" hidden>
+                    <svg class="icon-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9.5"></circle>
+                        <path d="M12 7.5v5.5"></path>
+                        <path d="M12 16.5h.01"></path>
+                    </svg>
+                    <svg class="icon-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9.5"></circle>
+                        <path d="m8 12.5 2.7 2.7L16 10"></path>
+                    </svg>
+                    <svg class="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9.5"></circle>
+                        <path d="M12 11v5"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    <span id="login-message-text"></span>
                 </div>
-                <form action="" id="login-form">
+
+                <div class="field">
                     <label for="matricula">Matrícula</label>
-                    <input type="number" name="matricula" id="matricula" autocomplete="username" required>
+                    <input type="text" name="matricula" id="matricula" inputmode="numeric" autocomplete="username" placeholder="Ex.: 2024001234" required>
+                </div>
+
+                <div class="field">
                     <label for="password">Senha</label>
                     <div class="password-field">
-                        <input type="password" name="password" id="password" autocomplete="current-password" required>
-                        <button type="button" id="visible-password-btn" aria-controls="password" aria-pressed="false">Mostrar</button>
+                        <input type="password" name="password" id="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+                        <button type="button" id="visible-password-btn" aria-controls="password" aria-pressed="false">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span class="visually-hidden">Mostrar</span>
+                        </button>
                     </div>
-                    <button type="button" id="btn-forgot-password">Esqueceu a senha?</button>
-                    <button type="submit" id="btn-login" aria-busy="false">
-                        <span class="button-label">Entrar</span>
-                        <span class="spinner" aria-hidden="true"></span>
-                    </button>
-                    <p id="login-message" role="status" aria-live="polite"></p>
-                    <p id="demo-footer">Biohub - Demonstração</p>
-                </form>
+                </div>
+
+                <button type="button" id="btn-forgot-password">Esqueceu a senha?</button>
+                <button type="submit" id="btn-login" aria-busy="false">
+                    <span class="button-label">Entrar</span>
+                    <span class="spinner" aria-hidden="true"></span>
+                </button>
+            </form>
+
+            <div class="card-footer">
+                <p class="help-text">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.4A8.5 8.5 0 1 1 21 12Z"></path>
+                    </svg>
+                    <span>Precisa de acesso? <strong>Fale com a coordenação da liga.</strong></span>
+                </p>
             </div>
         </section>
 
+        <p class="demo-footer">BioHub <span aria-hidden="true">·</span> Demonstração</p>
     </main>
 
     <script src="./js/script.js"></script>
