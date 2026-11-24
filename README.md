@@ -11,6 +11,10 @@ Biomed
 * Adição do -btn no botão de ocultação e visualização de senha
 * Mudança de logo
 
+24/11/2026
+
+* Foi realizada a alteração de visual para se adequar ao template usado no restante do site
+
 ## COMO EXECUTAR O BACKEND
 
 Na pasta principal do projeto, execute:
