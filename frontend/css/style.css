@@ -1455,7 +1455,7 @@ a:focus-visible {
     padding-right: clamp(2vw, 12vw, 12px);
     padding-left: clamp(2vw, 12vw, 12px);
     margin-top: 20px;
-    min-height: 100vw;
+    min-height: 70vw;
 }
 
 .main_artigo {
@@ -1796,4 +1796,108 @@ a:focus-visible {
     font-weight: 600;
     line-height: 1.15;
     color: var(--roxo-escuro);
+}
+
+
+
+
+/* ===== Barra de filtros ===== */
+.filtros {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 720px;
+    margin: 0 auto 3rem;
+}
+
+.filtro {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--branco);
+    border: 1px solid var(--lilas-acinzentado);
+    border-radius: 999px;
+    padding-left: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filtro:focus-within {
+    border-color: var(--roxo-medio);
+    box-shadow: 0 0 0 3px rgba(103, 49, 101, 0.18);
+}
+
+.filtro-icone {
+    display: flex;
+    align-items: center;
+    color: var(--roxo-medio);
+    pointer-events: none;
+}
+
+.filtro-campo {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--texto-escuro);
+    cursor: pointer;
+    padding: 0.6rem 2.4rem 0.6rem 0.6rem;
+    /* seta (chevron) desenhada em SVG */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23673165' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+}
+
+.filtro-campo:focus-visible {
+    outline: 0;
+}
+
+.filtro-limpar {
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--roxo-medio);
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filtro-limpar:hover {
+    background-color: var(--nevoa-lilas);
+    color: var(--roxo-escuro);
+}
+
+.filtro-limpar:focus-visible {
+    outline: 3px solid var(--roxo-medio);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .filtros {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filtro {
+        justify-content: space-between;
+    }
+    .filtro-campo {
+        flex: 1;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
 }
