@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Notícias, avisos da Liga, representação estudantil e informações da Liga Acadêmica de Biotecnologia da UniALFA">
-    <title>Notícias - BioHub</title>
-
+    <meta name="description" content="Notícias, avisos oficiais, congressos e representação estudantil da Liga Acadêmica de Biotecnologia (LAB) da UniALFA.">
+    <title>Notícias — BioHub-LAB</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,17 +16,16 @@
 
 <body>
 
-    <!-- 1.FAIXA SUPERIOR (idêntica à Home) --> 
-    <div class="faixa-superior" id="topo-noticias">
+    <!-- 1. FAIXA SUPERIOR (não-sticky: alvo seguro da âncora #topo) -->
+    <div class="faixa-superior" id="topo">
         <span class="ponto-verde" aria-hidden="true"></span>
-        <strong>BioHub</strong>
+        <strong>BioHub-LAB</strong>
         <span class="nome-faixa">Liga Acadêmica de Biotecnologia</span>
     </div>
 
-    
-    <!-- 2. CABEÇALHO (com "Notícias" ativo) -->
-    <header class="cabecalho" id="topo-noticias">
-        <a href="index.html" class="logo" aria-label="BioHub, ir para o início">
+    <!-- 2. CABEÇALHO PRINCIPAL -->
+    <header class="cabecalho">
+        <a href="index.html" class="logo" aria-label="BioHub-LAB, ir para o início">
             <img src="img/Logo Oficial - BioHub.jpeg" alt="" class="logo-img">
             <span class="logo-nome">BioHub</span>
         </a>
@@ -41,86 +39,176 @@
             </ul>
         </nav>
 
-        <a href="area-da-liga/index.html" class="botao-area-liga">Área da Liga &rarr;</a>
+        <a href="area-da-liga/index.html" class="botao-area-liga">Área da Liga <span aria-hidden="true">&rarr;</span></a>
     </header>
 
-    
     <!-- 3. CONTEÚDO PRINCIPAL DA PÁGINA DE NOTÍCIAS -->
     <main class="pagina-noticias">
 
         <!-- 3.1 BANNER HERO ("O que acontece na LAB") -->
-        <section class="banner-noticias" aria-labelledby="título-página-notícias">
-
-            <!-- Ícone verde com desenho de jornal/documento em SVG -->
-             <div class="banner-noticias-icone" aria-hidden="true">
+        <section class="banner-noticias" aria-labelledby="titulo-pagina-noticias">
+            <div class="banner-noticias-icone" aria-hidden="true">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
                     <path d="M18 14h-8"></path>
                     <path d="M15 18h-5"></path>
                     <path d="M10 6h8v4h-8V6Z"></path>
                 </svg>
-             </div>
-
+            </div>
 
             <div class="banner-noticias-textos">
-                <p class="sobretitulo">Notícias</p>
+                <p class="sobretitulo">Mural da Liga &middot; UniALFA</p>
                 <h1 id="titulo-pagina-noticias">O que acontece na LAB</h1>
                 <p class="banner-noticias-descricao">
-                    Avisos da liga, representação estudantil e informações que movimentam nossa comunidade
+                    Avisos oficiais, congressos, editais, representação estudantil e atualizações que movimentam a comunidade de Biotecnologia e Biomedicina.
                 </p>
             </div>
 
-            <span class="banner-marca-dagua" aria-hidden="true">PAGE / NOTÍCIAS</span>
+            <span class="banner-marca-dagua" aria-hidden="true">BIOHUB / NOTÍCIAS</span>
         </section>
 
-        <!-- 3.2 BARRA DE FILTROS (Pílulas clicáveis) -->
-         <section class="controles-noticias" aria-label="Filtrar notícias por categorias">
-            <div class="lista-pilulas" role="tablist" aria-label="Categorias de notícias">
-                <button type="button" class="pilula-filtro ativo" data-filtro="todos" aria-pressed="true">Todos</button>
-                <button type="button" class="pilula-filtro" data-filtro="liga" aria-pressed="false">Liga Acadêmica</button>
-                <button type="button" class="pilula-filtro" data-filtro="congresso" aria-pressed="false">Congresso</button>
-                <button type="button" class="pilula-filtro" data-filtro="representacao" aria-pressed="false">Representação</button>
-                <button type="button" class="pilula-filtro" data-filtro="avisos" aria-pressed="false">Avisos</button>
-            </div>
-         </section>
+        <!-- 3.2 PAINEL DE BUSCA, ORDENAÇÃO POR DATA E FILTROS POR CATEGORIA -->
+        <section class="controles-noticias" aria-label="Buscar, ordenar e filtrar notícias">
 
-         <!-- 3.3 GRID DE CARTÕES DO FEED (3 Colunas) -->
-          <section class="catalogo-noticias" aria-label="Lista de notícias publicadas">
+            <div class="barra-ferramentas-noticias">
+                <!-- Campo de busca em tempo real -->
+                <div class="campo-busca-noticias">
+                    <label for="busca-noticias" class="apenas-leitor-tela">Buscar notícias por título, assunto ou categoria</label>
+                    <svg class="icone-busca-noticias" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                    <input
+                        type="search"
+                        id="busca-noticias"
+                        class="input-busca-noticias"
+                        placeholder="Buscar por título, palavra-chave ou assunto..."
+                        autocomplete="off"
+                    >
+                    <button
+                        type="button"
+                        id="btn-limpar-busca"
+                        class="btn-limpar-busca"
+                        aria-label="Limpar texto da busca"
+                        hidden
+                    >&times;</button>
+                </div>
+
+                <!-- Seletor de ordenação por data de publicação -->
+                <div class="campo-ordenacao-noticias">
+                    <label for="ordem-noticias" class="rotulo-ordenacao">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m3 16 4 4 4-4"></path>
+                            <path d="M7 20V4"></path>
+                            <path d="M11 4h10"></path>
+                            <path d="M11 8h7"></path>
+                            <path d="M11 12h4"></path>
+                        </svg>
+                        <span>Publicação:</span>
+                    </label>
+                    <select id="ordem-noticias" class="select-ordenacao-noticias" aria-label="Ordenar notícias por data de publicação">
+                        <option value="recentes" selected>Mais recentes primeiro</option>
+                        <option value="antigas">Mais antigas primeiro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pílulas de categoria + resumo dinâmico de resultados -->
+            <div class="linha-filtros-noticias">
+                <div class="lista-pilulas" role="group" aria-label="Filtrar notícias por categoria">
+                    <button type="button" class="pilula-filtro ativo" data-filtro="todos" aria-pressed="true">Todos</button>
+                    <button type="button" class="pilula-filtro" data-filtro="liga" aria-pressed="false">Liga Acadêmica</button>
+                    <button type="button" class="pilula-filtro" data-filtro="congresso" aria-pressed="false">Congresso</button>
+                    <button type="button" class="pilula-filtro" data-filtro="representacao" aria-pressed="false">Representação</button>
+                    <button type="button" class="pilula-filtro" data-filtro="avisos" aria-pressed="false">Avisos</button>
+                </div>
+
+                <div class="resumo-resultados-noticias">
+                    <p id="contador-noticias" class="contador-noticias" role="status" aria-live="polite">
+                        Exibindo 6 notícias
+                    </p>
+                    <button type="button" id="btn-resetar-filtros" class="btn-resetar-filtros" hidden>
+                        Limpar filtros
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 3.3 CATÁLOGO DE NOTÍCIAS (3 colunas no desktop, 2 no tablet, 1 no celular) -->
+        <section class="catalogo-noticias" aria-label="Lista de notícias publicadas">
             <div class="grid-catalogo-noticias" id="grid-noticias-lista">
 
-                <!-- CARTÃO 01: Liga Acadêmica -->
-                 <article class="card-feed-noticia" data-categoria="liga">
-                    <div class="card-feed-midia">
-                        <img src="img/Resultado do Processo Seletivo UniALFA 2026.2.png" alt="Resultado do Processo Seletivo UniALFA">
+                <!-- CARTÃO 01: Avisos (14 nov 2026) -->
+                <article class="card-feed-noticia" data-categoria="avisos" data-publicacao="2026-11-14">
+                    <figure class="card-feed-midia">
+                        <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Estudantes reunidos em espaço colaborativo do campus da UniALFA">
                         <span class="card-feed-numero" aria-hidden="true">01</span>
-                    </div> 
-                
-                <div class="card-feed-corpo">
-                        <span class="categoria categoria-liga">Liga Acadêmica</span>
+                    </figure>
+
+                    <div class="card-feed-corpo">
+                        <span class="categoria categoria-avisos">Avisos</span>
                         <h2>
                             <a href="#ler-noticia" class="link-abrir-noticia">
-                                Resultado do processo seletivo para novos membros 2026.2
+                                Mudança no calendário de reuniões mensais de novembro
                             </a>
                         </h2>
                         <p class="card-feed-resumo">
-                            Os candidatos aprovados já podem conferir a lista e acessar o cronograma de integração da liga.
+                            Confira os novos horários dos encontros administrativos da LAB e a pauta de encerramento do semestre 2026.2.
                         </p>
+
+                        <div class="card-feed-completo" hidden>
+                            <p>A diretoria da Liga Acadêmica de Biotecnologia (LAB) informa que as reuniões ordinárias de novembro passaram para as quartas-feiras, às 18h15, antecedendo o início das aulas do período noturno na UniALFA.</p>
+                            <p>Na pauta deste mês estão a definição das bancas de apresentação interna, o balanço dos grupos de estudo do semestre e o planejamento das atividades de recepção para 2027.1. A participação dos membros efetivos conta presença em ata.</p>
+                        </div>
 
                         <div class="card-feed-rodape">
                             <span class="card-feed-meta">
-                                <time datetime="2026-09-15">15 set 2026</time> &middot; 2 min de leitura
+                                <time datetime="2026-11-14">14 nov 2026</time> &middot; 2 min de leitura
                             </span>
-                            <span class="card-feed-seta" aria-hidden="true">&rarr;</span>
-                         </div>
+                            <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
+                        </div>
                     </div>
                 </article>
 
-                <!-- CARTÃO 02: Congresso -->
-                <article class="card-feed-noticia" data-categoria="congresso">
-                    <div class="card-feed-midia">
-                        <img src="img/Congresso de Biomedicina UniALFA.png" alt="Estudantes levantando a mão para perguntas em um auditório">
+                <!-- CARTÃO 02: Liga Acadêmica (04 nov 2026) -->
+                <article class="card-feed-noticia" data-categoria="liga" data-publicacao="2026-11-04">
+                    <figure class="card-feed-midia">
+                        <img src="img/Gemini_Generated_Image_n9bl7xn9bl7xn9bl.jpg" alt="Pesquisador de jaleco analisando amostras em microscópio no laboratório" loading="lazy">
                         <span class="card-feed-numero" aria-hidden="true">02</span>
+                    </figure>
+
+                    <div class="card-feed-corpo">
+                        <span class="categoria categoria-liga">Liga Acadêmica</span>
+                        <h2>
+                            <a href="#ler-noticia" class="link-abrir-noticia">
+                                LAB abre chamada para grupos de pesquisa aplicada em Biotecnologia
+                            </a>
+                        </h2>
+                        <p class="card-feed-resumo">
+                            Estudantes de Biomedicina podem se inscrever nas frentes de diagnóstico molecular, microbiologia e genética.
+                        </p>
+
+                        <div class="card-feed-completo" hidden>
+                            <p>Estão abertas as inscrições internas para os novos núcleos de estudo e iniciação científica organizados pela Liga Acadêmica de Biotecnologia (LAB) em parceria com docentes convidados do curso de Biomedicina.</p>
+                            <p>Cada grupo realizará encontros quinzenais voltados à leitura crítica de artigos, discussão de protocolos laboratoriais e elaboração de resumos científicos para congressos regionais. Os interessados devem preencher a ficha disponível com a coordenação da liga.</p>
+                        </div>
+
+                        <div class="card-feed-rodape">
+                            <span class="card-feed-meta">
+                                <time datetime="2026-11-04">04 nov 2026</time> &middot; 3 min de leitura
+                            </span>
+                            <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
+                        </div>
                     </div>
+                </article>
+
+                <!-- CARTÃO 03: Congresso (10 out 2026 — alinhado com index.html) -->
+                <article class="card-feed-noticia" data-categoria="congresso" data-publicacao="2026-10-10">
+                    <figure class="card-feed-midia">
+                        <img src="img/Congresso de Biomedicina UniALFA.png" alt="Estudantes participando de palestra no auditório durante congresso acadêmico" loading="lazy">
+                        <span class="card-feed-numero" aria-hidden="true">03</span>
+                    </figure>
 
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-congresso">Congresso</span>
@@ -130,24 +218,29 @@
                             </a>
                         </h2>
                         <p class="card-feed-resumo">
-                            O evento acontece em novembro e aceita submissão de trabalhos científicos até 20 de outubro.
+                            O evento reúne palestras, minicursos práticos e aceita submissão de trabalhos científicos até 20 de novembro.
                         </p>
+
+                        <div class="card-feed-completo" hidden>
+                            <p>O III Congresso de Biomedicina da UniALFA já está com inscrições abertas para ouvintes e autores de resumos científicos. A programação contempla mesas-redondas sobre biotecnologia diagnóstica, análises clínicas e inovação em saúde.</p>
+                            <p>Integrantes da LAB terão plantão de orientação para padronização de pôsteres e normas ABNT. As submissões de trabalhos seguem abertas até o dia 20 de novembro, com emissão de certificado institucional para participantes e apresentadores.</p>
+                        </div>
 
                         <div class="card-feed-rodape">
                             <span class="card-feed-meta">
-                                <time datetime="2026-09-10">10 set 2026</time> &middot; 3 min de leitura
+                                <time datetime="2026-10-10">10 out 2026</time> &middot; 3 min de leitura
                             </span>
-                            <span class="card-feed-seta" aria-hidden="true">&rarr;</span>
+                            <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
                     </div>
                 </article>
 
-                <!-- CARTÃO 03: Representação -->
-                <article class="card-feed-noticia" data-categoria="representacao">
-                    <div class="card-feed-midia">
-                        <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Fachada arborizada do prédio da universidade">
-                        <span class="card-feed-numero" aria-hidden="true">03</span>
-                    </div>
+                <!-- CARTÃO 04: Representação (08 out 2026 — alinhado com index.html) -->
+                <article class="card-feed-noticia" data-categoria="representacao" data-publicacao="2026-10-08">
+                    <figure class="card-feed-midia">
+                        <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Área externa arborizada e espaço de convivência acadêmica no campus" loading="lazy">
+                        <span class="card-feed-numero" aria-hidden="true">04</span>
+                    </figure>
 
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-representacao">Representação</span>
@@ -157,85 +250,149 @@
                             </a>
                         </h2>
                         <p class="card-feed-resumo">
-                            O espaço já está disponível para os alunos e conta com estrutura para grupos de pesquisa.
+                            O espaço já está disponível para os alunos e conta com estrutura dedicada para reuniões de ligas e grupos de pesquisa.
                         </p>
+
+                        <div class="card-feed-completo" hidden>
+                            <p>Após diálogo entre a representação discente, as ligas acadêmicas e a coordenação, o novo espaço de estudos colaborativos foi oficialmente entregue aos estudantes no campus da UniALFA.</p>
+                            <p>O ambiente dispõe de mesas coletivas, pontos de energia para notebooks e quadro de apoio para revisões em grupo. O agendamento de horários prioritários para reuniões da LAB pode ser solicitado junto aos representantes de turma.</p>
+                        </div>
 
                         <div class="card-feed-rodape">
                             <span class="card-feed-meta">
-                                <time datetime="2026-09-03">03 set 2026</time> &middot; 4 min de leitura
+                                <time datetime="2026-10-08">08 out 2026</time> &middot; 4 min de leitura
                             </span>
-                            <span class="card-feed-seta" aria-hidden="true">&rarr;</span>
+                            <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
                     </div>
                 </article>
 
-                <!-- CARTÃO 04: Avisos -->
-                <article class="card-feed-noticia" data-categoria="avisos">
-                    <div class="card-feed-midia">
-                        <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Estudantes caminhando pelo campus da UniALFA">
-                        <span class="card-feed-numero" aria-hidden="true">04</span>
-                    </div>
+                <!-- CARTÃO 05: Avisos (28 set 2026) -->
+                <article class="card-feed-noticia" data-categoria="avisos" data-publicacao="2026-09-28">
+                    <figure class="card-feed-midia">
+                        <img src="img/Congresso de Biomedicina UniALFA.png" alt="Estudantes acompanhando apresentação científica em auditório universitário" loading="lazy">
+                        <span class="card-feed-numero" aria-hidden="true">05</span>
+                    </figure>
 
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-avisos">Avisos</span>
                         <h2>
                             <a href="#ler-noticia" class="link-abrir-noticia">
-                                Mudança no calendário de reuniões mensais
+                                Orientações para validação de certificados e horas complementares
                             </a>
                         </h2>
                         <p class="card-feed-resumo">
-                            Os candidatos aprovados já podem conferir a lista e acessar o cronograma de integração da liga.
+                            Veja o passo a passo para emitir e protocolar os certificados dos encontros e workshops promovidos pela LAB.
                         </p>
+
+                        <div class="card-feed-completo" hidden>
+                            <p>Os certificados referentes aos encontros científicos e oficinas realizados pela Liga Acadêmica de Biotecnologia já estão disponíveis para conferência pelos alunos que assinaram a lista de presença.</p>
+                            <p>Para contabilizar a carga horária como atividade complementar, confira se o seu nome completo e número de matrícula estão corretos no documento antes de enviá-lo pelo portal acadêmico da instituição dentro do prazo semestral.</p>
+                        </div>
+
+                        <div class="card-feed-rodape">
+                            <span class="card-feed-meta">
+                                <time datetime="2026-09-28">28 set 2026</time> &middot; 2 min de leitura
+                            </span>
+                            <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- CARTÃO 06: Liga Acadêmica (15 set 2026 — alinhado com index.html) -->
+                <article class="card-feed-noticia" data-categoria="liga" data-publicacao="2026-09-15">
+                    <figure class="card-feed-midia">
+                        <img src="img/Resultado do Processo Seletivo UniALFA 2026.2.png" alt="Estudante realizando procedimento com pipeta em bancada de laboratório" loading="lazy">
+                        <span class="card-feed-numero" aria-hidden="true">06</span>
+                    </figure>
+
+                    <div class="card-feed-corpo">
+                        <span class="categoria categoria-liga">Liga Acadêmica</span>
+                        <h2>
+                            <a href="#ler-noticia" class="link-abrir-noticia">
+                                Resultado do processo seletivo para novos membros 2026.2
+                            </a>
+                        </h2>
+                        <p class="card-feed-resumo">
+                            Os candidatos aprovados já podem conferir a lista oficial e acessar o cronograma de integração da liga.
+                        </p>
+
+                        <div class="card-feed-completo" hidden>
+                            <p>A Liga Acadêmica de Biotecnologia (LAB) parabeniza todos os estudantes que participaram das etapas da seleção 2026.2. A relação final de aprovados contempla novos membros para as frentes científica, de comunicação e de organização de encontros.</p>
+                            <p>A reunião de boas-vindas e acolhimento apresentará o estatuto da liga, o calendário de publicações do portal BioHub-LAB e a divisão das equipes de trabalho para o semestre.</p>
+                        </div>
 
                         <div class="card-feed-rodape">
                             <span class="card-feed-meta">
                                 <time datetime="2026-09-15">15 set 2026</time> &middot; 2 min de leitura
                             </span>
-                            <span class="card-feed-seta" aria-hidden="true">&rarr;</span>
+                            <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
                     </div>
                 </article>
 
             </div>
 
+            <!-- Estado vazio amigável quando busca/categoria não encontra itens -->
             <div class="noticias-vazio" id="mensagem-vazio" hidden>
-                <p>Nenhuma notícia encontrada nessa categoria.</p>
+                <div class="noticias-vazio-icone" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                        <path d="M8 11h6"></path>
+                    </svg>
+                </div>
+                <h2 class="noticias-vazio-titulo" id="mensagem-vazio-titulo">Nenhuma notícia encontrada</h2>
+                <p class="noticias-vazio-texto" id="mensagem-vazio-detalhe">
+                    Tente buscar por outro termo ou limpar os filtros selecionados.
+                </p>
+                <button type="button" id="btn-vazio-limpar" class="btn-secundario btn-vazio-acao">
+                    Mostrar todas as notícias
+                </button>
             </div>
-          </section>
+        </section>
 
     </main>
 
-    <!--  4. MODAL DE LEITURA DA NOTÍCIA COMPLETA  -->
-    
-    <div class="modal-noticia-backdrop" id="modal-noticia"
-    aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-noticia-titulo">
-        <div class="modal-noticia-caixa">
+    <!-- 4. MODAL DE LEITURA DA NOTÍCIA COMPLETA -->
+    <div
+        class="modal-noticia-backdrop"
+        id="modal-noticia"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-noticia-titulo"
+    >
+        <div class="modal-noticia-caixa" role="document">
             <div class="modal-noticia-topo">
-
                 <span class="categoria" id="modal-noticia-categoria">Categoria</span>
 
-                <button type="button" class="modal-noticia-fechar" id="btn-fechar-modal" aria-label="Fechar notícia"> &times;
+                <button type="button" class="modal-noticia-fechar" id="btn-fechar-modal" aria-label="Fechar leitura da notícia">
+                    <span aria-hidden="true">&times;</span>
                 </button>
-
             </div>
 
-            <img src="" alt="" id="modal-noticia-img" class="modal-noticia-imagem">
-            <p class="modal-noticia-meta" id="modal-noticia-meta">
-            </p>
+            <div class="modal-noticia-conteudo-scroll">
+                <figure class="modal-noticia-figura">
+                    <img src="img/Logo Oficial - BioHub.jpeg" alt="" id="modal-noticia-img" class="modal-noticia-imagem">
+                </figure>
 
-            <h2 id="modal-noticia-titulo">
-                Título da Notícia
-            </h2>
+                <p class="modal-noticia-meta" id="modal-noticia-meta"></p>
 
-            <p class="modal-noticia-texto" id="modal-noticia-resumo">
-            </p>
+                <h2 id="modal-noticia-titulo">Título da notícia</h2>
 
-            <p class="modal-noticia-texto">Para mais detalhes sobre esta atualização, acompanhe oc comunidados oficiais no mural do bloco de Biomedicina ou entre em contado com a diretoria da Liga Acadêmica de Biotecnologia (LAB) pelo nosso Instagram oficial.</p>
+                <p class="modal-noticia-resumo-destaque" id="modal-noticia-resumo"></p>
+
+                <div class="modal-noticia-corpo" id="modal-noticia-corpo"></div>
+
+                <p class="modal-noticia-rodape-nota">
+                    Para mais detalhes sobre esta atualização, acompanhe os comunicados oficiais no mural do curso de Biomedicina ou entre em contato com a diretoria da Liga Acadêmica de Biotecnologia (LAB) pelo perfil oficial <strong>@lab-unialfa</strong>.
+                </p>
+            </div>
         </div>
     </div>
 
-    <!--  5. RODAPÉ INSTITUCIONAL (idêntico ao index.html)  -->
-
+    <!-- 5. RODAPÉ INSTITUCIONAL -->
     <footer class="rodape">
         <div class="rodape-topo">
             <div class="rodape-marca">
@@ -245,42 +402,33 @@
                     class="rodape-logo"
                 >
                 <div>
-                    <p class="rodape-titulo">BioHub</p>
-                    <p>
-                        Liga Acadêmica de Biotecnologia
-                        &middot; UniALFA
-                    </p>
-                    <p>
-                        email-exemplo@biohub.com
-                        &middot; @lab-unialfa
-                    </p>
+                    <p class="rodape-titulo">BioHub-LAB</p>
+                    <p>Liga Acadêmica de Biotecnologia &middot; UniALFA</p>
+                    <p>email-exemplo@biohub.com &middot; @lab-unialfa</p>
                 </div>
             </div>
 
             <p class="rodape-descricao">
-                Ciência que conecta, conhecimento que
-                transforma. Um espaço para compartilhar
-                descobertas e fortalecer a comunidade
-                acadêmica.
+                Ciência que conecta, conhecimento que transforma. Um espaço para compartilhar descobertas e fortalecer a comunidade acadêmica.
             </p>
         </div>
 
         <nav class="rodape-links" aria-label="Links do rodapé">
             <a href="index.html">Início</a>
-            <a href="noticias.html">Notícias</a>
+            <a href="noticias.html" aria-current="page">Notícias</a>
             <a href="artigos.html">Artigos</a>
             <a href="encontros.html">Encontros</a>
         </nav>
 
         <div class="rodape-final">
             <p class="direitos">
-                &copy; 2026 Projeto BioHub
-                &middot; Todos os Direitos Reservados
+                &copy; 2026 Projeto BioHub-LAB &middot; Todos os Direitos Reservados
             </p>
-            <a href="#topo-noticias" class="voltar-topo">
-                Voltar ao topo &uarr;
+            <a href="#topo" class="voltar-topo">
+                Voltar ao topo <span aria-hidden="true">&uarr;</span>
             </a>
         </div>
     </footer>
+
 </body>
 </html>
