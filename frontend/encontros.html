@@ -2,10 +2,190 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encontros</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Próximos encontros, palestras e workshops da Liga Acadêmica de Biotecnologia (LAB) da UniALFA.">
+    <title>Encontros — BioHub-LAB</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js" defer></script>
 </head>
 <body>
-    
+
+    <div class="faixa-superior" id="topo">
+        <span class="ponto-verde" aria-hidden="true"></span>
+        <strong>BioHub-LAB</strong>
+        <span class="nome-faixa">Liga Acadêmica de Biotecnologia</span>
+    </div>
+
+    <header class="cabecalho">
+        <a href="index.html" class="logo" aria-label="BioHub-LAB, ir para o início">
+            <img src="img/Logo Oficial - BioHub.jpeg" alt="" class="logo-img">
+            <span class="logo-nome">BioHub</span>
+        </a>
+
+        <nav class="menu" aria-label="Menu principal">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="noticias.html">Notícias</a></li>
+                <li><a href="artigos.html">Artigos</a></li>
+                <li><a href="encontros.html" aria-current="page">Encontros</a></li>
+            </ul>
+        </nav>
+
+        <a href="area-da-liga/index.html" class="botao-area-liga" aria-label="Acessar Área da Liga">
+            <span class="texto-desktop-liga">Área da </span><span>Liga</span>
+            <span class="icone-seta-liga" aria-hidden="true">&rarr;</span>
+        </a>
+    </header>
+
+    <main class="pagina-compacta">
+        <section class="painel-secao-interna" aria-labelledby="titulo-pagina-encontros">
+            <p class="sobretitulo">Agenda da Liga &middot; UniALFA</p>
+            <h1 id="titulo-pagina-encontros">Próximos encontros</h1>
+            <p>
+                Palestras, oficinas práticas e reuniões abertas promovidas pela Liga Acadêmica de Biotecnologia.
+            </p>
+        </section>
+
+        <div class="lista-encontros">
+            <article class="cartao-evento" data-item-id="evento-biomarcadores">
+                <time datetime="2026-11-05" class="data-evento">
+                    <span class="dia">05</span>
+                    <span class="mes">NOV</span>
+                </time>
+                <div class="info-evento">
+                    <span class="evento-categoria">Palestra</span>
+                    <h3>Biomarcadores no diagnóstico precoce do câncer</h3>
+                    <p class="detalhes-evento">Profa. Dra. Ana Paula Souza</p>
+                    <ul class="evento-meta">
+                        <li><span class="icone-meta" aria-hidden="true">◷</span> 19h</li>
+                        <li><span class="icone-meta" aria-hidden="true">⌖</span> Bloco C, Sala 12</li>
+                    </ul>
+                </div>
+                <div class="acoes-evento-mobile">
+                    <button
+                        type="button"
+                        class="btn-acao-social"
+                        data-acao="salvar"
+                        data-item-id="evento-biomarcadores"
+                        aria-pressed="false"
+                        aria-label="Salvar encontro: Biomarcadores no diagnóstico precoce do câncer"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        <span class="rotulo-salvar">Salvar</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="btn-acao-social"
+                        data-acao="compartilhar"
+                        data-share-titulo="Palestra: Biomarcadores no diagnóstico precoce do câncer"
+                        data-share-texto="05 NOV às 19h · Bloco C, Sala 12 — BioHub-LAB"
+                        data-share-url="encontros.html"
+                        aria-label="Compartilhar encontro: Biomarcadores no diagnóstico precoce do câncer"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                        <span>Compartilhar</span>
+                    </button>
+                </div>
+            </article>
+
+            <article class="cartao-evento" data-item-id="evento-hematologia">
+                <time datetime="2026-11-12" class="data-evento">
+                    <span class="dia">12</span>
+                    <span class="mes">NOV</span>
+                </time>
+                <div class="info-evento">
+                    <span class="evento-categoria">Workshop</span>
+                    <h3>Hematologia clínica: casos práticos e interpretação laboratorial</h3>
+                    <p class="detalhes-evento">Profissional convidado</p>
+                    <ul class="evento-meta">
+                        <li><span class="icone-meta" aria-hidden="true">◷</span> 20h</li>
+                        <li><span class="icone-meta" aria-hidden="true">⌖</span> Online, Google Meet</li>
+                    </ul>
+                </div>
+                <div class="acoes-evento-mobile">
+                    <button
+                        type="button"
+                        class="btn-acao-social"
+                        data-acao="salvar"
+                        data-item-id="evento-hematologia"
+                        aria-pressed="false"
+                        aria-label="Salvar encontro: Hematologia clínica"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        <span class="rotulo-salvar">Salvar</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="btn-acao-social"
+                        data-acao="compartilhar"
+                        data-share-titulo="Workshop: Hematologia clínica — casos práticos"
+                        data-share-texto="12 NOV às 20h · Online, Google Meet — BioHub-LAB"
+                        data-share-url="encontros.html"
+                        aria-label="Compartilhar encontro: Hematologia clínica"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                        <span>Compartilhar</span>
+                    </button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <nav class="barra-navegacao-mobile" aria-label="Navegação principal móvel">
+        <a href="index.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5 10v10h14V10"/></svg>
+            <span>Início</span>
+        </a>
+        <a href="noticias.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <span>Notícias</span>
+        </a>
+        <a href="encontros.html" class="item-nav-mobile" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+            <span>Encontros</span>
+        </a>
+        <a href="artigos.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>
+            <span>Artigos</span>
+        </a>
+        <a href="area-da-liga/index.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 3.5-7 8-7s7 2 8 7"/></svg>
+            <span>Liga</span>
+        </a>
+    </nav>
+
+    <footer class="rodape">
+        <div class="rodape-topo">
+            <div class="rodape-marca">
+                <img src="img/Logo Oficial - BioHub.jpeg" alt="Logo da Liga Acadêmica de Biotecnologia" class="rodape-logo">
+                <div>
+                    <p class="rodape-titulo">BioHub-LAB</p>
+                    <p>Liga Acadêmica de Biotecnologia &middot; UniALFA</p>
+                    <p>email-exemplo@biohub.com &middot; @lab-unialfa</p>
+                </div>
+            </div>
+            <p class="rodape-descricao">
+                Ciência que conecta, conhecimento que transforma. Um espaço para compartilhar descobertas e fortalecer a comunidade acadêmica.
+            </p>
+        </div>
+
+        <nav class="rodape-links" aria-label="Links do rodapé">
+            <a href="index.html">Início</a>
+            <a href="noticias.html">Notícias</a>
+            <a href="artigos.html">Artigos</a>
+            <a href="encontros.html" aria-current="page">Encontros</a>
+        </nav>
+
+        <div class="rodape-final">
+            <p class="direitos">&copy; 2026 Projeto BioHub-LAB &middot; Todos os Direitos Reservados</p>
+            <a href="#topo" class="voltar-topo">Voltar ao topo &uarr;</a>
+        </div>
+    </footer>
+
 </body>
 </html>

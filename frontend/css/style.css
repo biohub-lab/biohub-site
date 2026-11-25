@@ -62,6 +62,8 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
+    max-width: 100%;
+    overflow-x: clip;
 }
 
 body {
@@ -69,6 +71,15 @@ body {
     background-color: var(--fundo-pagina);
     color: var(--texto-escuro);
     line-height: 1.6;
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
 }
 
 a {
@@ -1077,12 +1088,15 @@ a:focus-visible {
 /* Utilitário de acessibilidade para rótulos visíveis apenas a leitores de tela */
 .apenas-leitor-tela {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 1px;
     height: 1px;
     padding: 0;
     margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
     white-space: nowrap;
     border: 0;
 }
@@ -1186,6 +1200,8 @@ a:focus-visible {
 /* ---------- 2. Painel de Busca, Ordenação e Filtros ---------- */
 
 .controles-noticias {
+    position: relative;
+    z-index: 30;
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
@@ -1280,51 +1296,217 @@ a:focus-visible {
     outline-offset: 2px;
 }
 
-/* Seletor de ordenação (Mais recentes / Mais antigas) */
-.campo-ordenacao-noticias {
+/* Seletor customizado de ordenação (Mais recentes / Mais antigas) */
+.seletor-ordenacao {
+    position: relative;
+    min-width: 245px;
+}
+
+.gatilho-ordenacao {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    min-height: 46px;
-    padding: 0.35rem 0.85rem 0.35rem 0.95rem;
-    border: 1.5px solid rgba(103, 49, 101, 0.2);
-    border-radius: 14px;
+    gap: 0.65rem;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.38rem 0.6rem 0.38rem 0.52rem;
+    border: 1.5px solid rgba(103, 49, 101, 0.18);
+    border-radius: 15px;
     background-color: var(--branco);
+    font-family: var(--fonte-principal);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.campo-ordenacao-noticias:focus-within {
+.gatilho-ordenacao:hover {
+    border-color: rgba(103, 49, 101, 0.42);
+    background-color: #FDFBFF;
+}
+
+.gatilho-ordenacao:focus-visible {
+    outline: none;
     border-color: var(--roxo-medio);
-    box-shadow: 0 0 0 3px rgba(103, 49, 101, 0.14);
+    box-shadow: 0 0 0 3px rgba(103, 49, 101, 0.15);
 }
 
-.rotulo-ordenacao {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    white-space: nowrap;
+.gatilho-ordenacao[aria-expanded="true"] {
+    border-color: var(--roxo-medio);
+    background-color: var(--branco);
+    box-shadow: 0 8px 20px rgba(103, 49, 101, 0.12), 0 0 0 3px rgba(103, 49, 101, 0.1);
+}
+
+.icone-gatilho-ordenacao {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--nevoa-lilas) 0%, var(--nevoa-verde) 100%);
+    color: var(--roxo-medio);
+}
+
+.textos-gatilho-ordenacao {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.rotulo-gatilho-ordenacao {
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    line-height: 1.1;
     color: var(--texto-suave);
 }
 
-.rotulo-ordenacao svg {
-    color: var(--roxo-medio);
-    flex-shrink: 0;
-}
-
-.select-ordenacao-noticias {
-    border: 0;
-    background-color: transparent;
-    font-family: var(--fonte-principal);
+.valor-gatilho-ordenacao {
     font-size: 0.88rem;
     font-weight: 600;
+    line-height: 1.2;
     color: var(--roxo-escuro);
-    padding-right: 0.35rem;
-    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.select-ordenacao-noticias:focus {
+.seta-gatilho-ordenacao {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--nevoa-lilas);
+    color: var(--roxo-escuro);
+    transition: transform 0.22s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.gatilho-ordenacao[aria-expanded="true"] .seta-gatilho-ordenacao {
+    transform: rotate(180deg);
+    background-color: var(--roxo-medio);
+    color: var(--branco);
+}
+
+/* Menu flutuante arredondado da ordenação (substitui o dropdown nativo retangular) */
+.menu-ordenacao {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 60;
+    min-width: 280px;
+    padding: 0.42rem;
+    border: 1px solid var(--lilas-etiqueta);
+    border-radius: 18px;
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 18px 38px rgba(52, 21, 57, 0.18), 0 4px 12px rgba(2, 46, 45, 0.07);
+    animation: surgir-menu-ordenacao 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.menu-ordenacao[hidden] {
+    display: none !important;
+}
+
+@keyframes surgir-menu-ordenacao {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.opcao-ordenacao {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 22px;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 50px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background-color 0.16s ease, border-color 0.16s ease;
+}
+
+.opcao-ordenacao + .opcao-ordenacao {
+    margin-top: 0.25rem;
+}
+
+.opcao-ordenacao:hover {
+    background-color: var(--nevoa-lilas);
+}
+
+.opcao-ordenacao:focus-visible {
     outline: none;
+    background-color: var(--nevoa-lilas);
+    border-color: var(--roxo-medio);
+}
+
+.opcao-ordenacao-icone {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: var(--nevoa-lilas);
+    color: var(--roxo-medio);
+    transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.opcao-ordenacao-textos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+    min-width: 0;
+}
+
+.opcao-ordenacao-textos strong {
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--texto-escuro);
+}
+
+.opcao-ordenacao-textos small {
+    font-size: 0.72rem;
+    line-height: 1.25;
+    color: var(--texto-suave);
+}
+
+.opcao-ordenacao-check {
+    display: grid;
+    place-items: center;
+    color: var(--verde-manguezal);
+    opacity: 0;
+    transform: scale(0.75);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.opcao-ordenacao.ativo {
+    background: linear-gradient(135deg, var(--nevoa-verde) 0%, var(--nevoa-lilas) 100%);
+    border-color: rgba(33, 102, 81, 0.24);
+}
+
+.opcao-ordenacao.ativo .opcao-ordenacao-icone {
+    background-color: var(--verde-manguezal);
+    color: var(--branco);
+}
+
+.opcao-ordenacao.ativo .opcao-ordenacao-textos strong {
+    font-weight: 700;
+    color: var(--verde-hero);
+}
+
+.opcao-ordenacao.ativo .opcao-ordenacao-check {
+    opacity: 1;
+    transform: scale(1);
 }
 
 /* Linha inferior: pílulas de categoria + contador/limpar */
@@ -1750,16 +1932,18 @@ a:focus-visible {
 
 @media (max-width: 780px) {
     .barra-ferramentas-noticias {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .campo-ordenacao-noticias {
-        justify-content: space-between;
+    .seletor-ordenacao {
+        width: 100%;
+        min-width: 0;
     }
 
-    .select-ordenacao-noticias {
-        flex: 1;
-        text-align: right;
+    .menu-ordenacao {
+        left: 0;
+        right: 0;
+        min-width: 0;
     }
 
     .resumo-resultados-noticias {
@@ -1849,13 +2033,8 @@ a:focus-visible {
     }
 
     /* Fonte 16px evita zoom automático indesejado no iOS Safari ao focar */
-    .input-busca-noticias,
-    .select-ordenacao-noticias {
+    .input-busca-noticias {
         font-size: 1rem;
-    }
-
-    .select-ordenacao-noticias {
-        text-align: left;
     }
 
     .linha-filtros-noticias {
@@ -1916,5 +2095,1086 @@ a:focus-visible {
 
     .modal-noticia-conteudo-scroll {
         padding: 1.15rem 1.2rem 1.75rem;
+    }
+}
+
+
+/* ==========================================================
+   EXPERIÊNCIA MOBILE SOCIAL & USO COM UMA MÃO (<= 768px)
+   Mantém 100% da aparência e paleta oficial BioHub no desktop,
+   transformando telas portáteis em um feed prático de 1 mão.
+   ========================================================== */
+
+/* Elementos exclusivos da ergonomia mobile ficam ocultos no desktop */
+.chips-feed-mobile,
+.barra-navegacao-mobile,
+.atalho-polegar-mobile,
+.acoes-sociais-mobile,
+.acoes-evento-mobile,
+.acoes-sociais-noticia,
+.pilula-filtro-salvos,
+.modal-alca-mobile,
+.modal-acoes-mobile,
+.feed-mobile-vazio {
+    display: none;
+}
+
+/* Toast flutuante de feedback rápido (Salvar / Compartilhar) */
+.toast-mobile {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 260;
+    max-width: calc(100vw - 2rem);
+    padding: 0.75rem 1.2rem;
+    border-radius: 999px;
+    background-color: var(--verde-hero);
+    border: 1px solid rgba(185, 226, 214, 0.35);
+    box-shadow: 0 12px 28px rgba(2, 46, 45, 0.32);
+    font-size: 0.84rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--branco);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 14px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.toast-mobile.visivel {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* Páginas internas compactas (Artigos / Encontros) */
+.pagina-compacta {
+    padding: clamp(2rem, 4vw, 3.5rem) var(--margem-lateral) clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.painel-secao-interna {
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    margin-bottom: 1.75rem;
+    border: 1px solid var(--lilas-suave);
+    border-radius: var(--raio-painel);
+    background: linear-gradient(135deg, var(--nevoa-lilas) 0%, var(--branco) 55%, var(--nevoa-verde) 100%);
+    box-shadow: 0 12px 28px rgba(52, 21, 57, 0.06);
+}
+
+.painel-secao-interna h1 {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.85rem, 3.4vw, 2.6rem);
+    line-height: 1.15;
+    color: var(--roxo-escuro);
+    margin-bottom: 0.5rem;
+}
+
+.painel-secao-interna p {
+    max-width: 38rem;
+    color: var(--texto-suave);
+}
+
+@media (max-width: 768px) {
+
+    html {
+        scroll-padding-top: 4.5rem;
+    }
+
+    body {
+        padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+        -webkit-tap-highlight-color: rgba(103, 49, 101, 0.12);
+    }
+
+    /* 1. Topo compacto estilo app social (preserva âncora #topo não-sticky) */
+    .faixa-superior {
+        height: 0;
+        min-height: 0;
+        padding: 0;
+        overflow: hidden;
+        opacity: 0;
+    }
+
+    .cabecalho {
+        flex-wrap: nowrap;
+        min-height: 62px;
+        padding: 0.5rem 0.95rem;
+        gap: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(14px);
+        border-bottom-width: 3px;
+    }
+
+    /* A navegação principal desce para a barra fixa do polegar */
+    .cabecalho .menu {
+        display: none;
+    }
+
+    .logo {
+        gap: 0.6rem;
+    }
+
+    .logo-img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .logo-nome {
+        font-size: 1.28rem;
+    }
+
+    .texto-desktop-liga {
+        display: none;
+    }
+
+    .botao-area-liga {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-height: 40px;
+        padding: 0.25rem 0.3rem 0.25rem 0.85rem;
+        border-radius: 999px;
+        background-color: var(--verde-hero);
+        font-size: 0.8rem;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(2, 46, 45, 0.18);
+    }
+
+    .icone-seta-liga {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.16);
+        font-size: 0.88rem;
+        line-height: 1;
+    }
+
+    /* 2. Pílulas horizontais deslizáveis do Feed Social ("Para você", "Pesquisa"...) */
+    .chips-feed-mobile {
+        position: sticky;
+        top: 62px;
+        z-index: 90;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 0.65rem 0.95rem;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        background-color: rgba(241, 238, 248, 0.93);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(219, 184, 227, 0.45);
+    }
+
+    .chips-feed-mobile::-webkit-scrollbar {
+        display: none;
+    }
+
+    .chip-feed {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.38rem;
+        min-height: 40px;
+        padding: 0 1rem;
+        border: 1px solid var(--lilas-etiqueta);
+        border-radius: 999px;
+        background-color: var(--branco);
+        font-family: var(--fonte-principal);
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--texto-escuro);
+        cursor: pointer;
+        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .chip-feed svg,
+    .pilula-filtro-salvos svg {
+        width: 15px;
+        height: 15px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .chip-feed.ativo {
+        background-color: var(--verde-hero);
+        border-color: var(--verde-hero);
+        color: var(--branco);
+        box-shadow: 0 5px 14px rgba(2, 46, 45, 0.22);
+    }
+
+    .chip-feed:focus-visible {
+        outline: 3px solid var(--roxo-medio);
+        outline-offset: 2px;
+    }
+
+    .badge-contador-salvos {
+        display: inline-grid;
+        place-items: center;
+        min-width: 19px;
+        height: 19px;
+        padding: 0 0.3rem;
+        border-radius: 999px;
+        background-color: var(--lilas-suave);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--roxo-profundo);
+    }
+
+    .badge-contador-salvos[hidden] {
+        display: none !important;
+    }
+
+    /* Regras de ocultação dinâmica dos filtros mobile */
+    .hero[hidden],
+    .estatisticas[hidden],
+    .noticias[hidden],
+    .encontros[hidden],
+    .cartao-noticia[hidden],
+    .cartao-evento[hidden] {
+        display: none !important;
+    }
+
+    /* 3. Hero Mobile Imersivo em 1 Cartão (estilo app social da referência) */
+    .hero {
+        padding: 0.8rem 0.95rem 0;
+        background: none;
+    }
+
+    .hero-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 415px;
+        border-radius: 26px;
+        box-shadow: 0 14px 32px rgba(2, 46, 45, 0.24);
+    }
+
+    .hero-marca {
+        display: none;
+    }
+
+    .hero-imagem {
+        position: absolute;
+        inset: 0;
+        min-height: 0;
+        z-index: 0;
+    }
+
+    .hero-imagem::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(2, 46, 45, 0.97) 0%,
+            rgba(2, 46, 45, 0.78) 50%,
+            rgba(52, 21, 57, 0.24) 100%
+        );
+    }
+
+    .hero-legenda {
+        top: 0.9rem;
+        left: 0.9rem;
+        right: auto;
+        bottom: auto;
+        z-index: 2;
+        gap: 0.55rem;
+        padding: 0.38rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid rgba(185, 226, 214, 0.32);
+        background: rgba(2, 46, 45, 0.72);
+        backdrop-filter: blur(6px);
+    }
+
+    .hero-numero {
+        padding-right: 0.55rem;
+        font-size: 0.95rem;
+    }
+
+    .hero-legenda-textos strong {
+        font-size: 0.76rem;
+    }
+
+    .hero-legenda-textos span {
+        display: none;
+    }
+
+    .hero-conteudo {
+        position: relative;
+        z-index: 2;
+        gap: 0.65rem;
+        padding: 8rem 1.2rem 1.25rem;
+    }
+
+    .hero-categoria {
+        font-size: 0.66rem;
+    }
+
+    .titulo-principal {
+        font-size: clamp(1.75rem, 7.2vw, 2.15rem);
+        line-height: 1.04;
+    }
+
+    .hero-descricao {
+        font-size: 0.86rem;
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.88);
+    }
+
+    /* Botões do Hero lado a lado na base do card (zona natural do polegar) */
+    .hero-botoes {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        width: 100%;
+        margin-top: 0.2rem;
+    }
+
+    .hero-botao {
+        flex: 1 1 calc(50% - 0.3rem);
+        min-height: 46px;
+        padding: 0.65rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
+    }
+
+    /* 4. Barra de Métricas Compacta em 4 Colunas Horizontais */
+    .estatisticas {
+        margin-top: 0.85rem;
+        padding: 0 0.95rem;
+    }
+
+    .lista-estatisticas {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(2, 46, 45, 0.18);
+    }
+
+    .estatistica {
+        padding: 0.85rem 0.45rem;
+        gap: 0.15rem;
+        text-align: center;
+        align-items: center;
+        border-top: 0 !important;
+    }
+
+    .estatistica + .estatistica {
+        border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .estatistica-numero {
+        font-size: 1.32rem;
+    }
+
+    .estatistica-rotulo {
+        font-size: 0.64rem;
+        line-height: 1.18;
+    }
+
+    /* Estado vazio amigável dos salvos na Home */
+    .feed-mobile-vazio {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 1.25rem 0.95rem 0.5rem;
+        padding: 2.25rem 1.25rem;
+        border: 1px dashed var(--lilas-acinzentado);
+        border-radius: 22px;
+        background-color: var(--branco);
+        text-align: center;
+    }
+
+    .feed-mobile-vazio[hidden] {
+        display: none !important;
+    }
+
+    .feed-mobile-vazio-titulo {
+        font-family: var(--fonte-titulo);
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--roxo-escuro);
+    }
+
+    .feed-mobile-vazio-texto {
+        font-size: 0.88rem;
+        color: var(--texto-suave);
+    }
+
+    /* 5. Feed Social de Notícias na Home ("No seu feed") */
+    .noticias {
+        padding: 1.65rem 0.95rem 0.5rem;
+    }
+
+    .cabecalho-secao {
+        flex-wrap: nowrap;
+        align-items: flex-end;
+        margin-bottom: 0.95rem;
+    }
+
+    .cabecalho-secao h2 {
+        font-size: 1.5rem;
+    }
+
+    .link-secao {
+        font-size: 0.84rem;
+    }
+
+    .grid-noticias {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    /* Todos os cartões da Home viram posts coesos estilo rede social */
+    .cartao-noticia,
+    .cartao-noticia.destaque {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        max-width: 100%;
+        border: 1px solid var(--lilas-suave);
+        border-radius: 22px;
+        background-color: var(--branco);
+        box-shadow: 0 8px 22px rgba(52, 21, 57, 0.08);
+    }
+
+    .cartao-noticia-link,
+    .destaque .cartao-noticia-link {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .destaque .cartao-noticia-link::after {
+        display: none;
+    }
+
+    .cartao-noticia img,
+    .cartao-noticia:not(.destaque) img,
+    .destaque img {
+        position: static;
+        width: 100%;
+        height: 198px;
+        min-height: 0;
+        object-fit: cover;
+    }
+
+    .cartao-noticia-corpo,
+    .destaque .cartao-noticia-corpo {
+        position: static;
+        padding: 1rem 1.05rem 0.85rem;
+        gap: 0.45rem;
+    }
+
+    /* Etiqueta de categoria flutuando sobre o canto da foto como no protótipo */
+    .cartao-noticia-corpo .categoria {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(26, 32, 44, 0.16);
+    }
+
+    .cartao-noticia-corpo h3,
+    .destaque .cartao-noticia-corpo h3 {
+        font-size: 1.18rem;
+        line-height: 1.24;
+        color: var(--roxo-escuro);
+    }
+
+    .cartao-noticia-corpo p,
+    .destaque .cartao-noticia-corpo p {
+        font-size: 0.88rem;
+        color: var(--texto-suave);
+    }
+
+    .cartao-noticia-corpo .meta,
+    .destaque .cartao-noticia-corpo .meta {
+        order: -1;
+        margin-top: 0;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--texto-suave);
+    }
+
+    /* Barra de ações sociais (Salvar, Compartilhar e Abrir) na base do post */
+    .acoes-sociais-mobile,
+    .acoes-evento-mobile,
+    .acoes-sociais-noticia {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+        min-width: 0;
+        max-width: 100%;
+        padding: 0.6rem 1rem 0.8rem;
+        border-top: 1px solid var(--nevoa-lilas);
+    }
+
+    .acoes-sociais-noticia {
+        padding: 0.75rem 0 0;
+        margin-top: 0.35rem;
+    }
+
+    .btn-acao-social {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        min-height: 40px;
+        padding: 0.4rem 0.8rem;
+        border: 1px solid var(--lilas-suave);
+        border-radius: 999px;
+        background-color: var(--nevoa-lilas);
+        font-family: var(--fonte-principal);
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--roxo-escuro);
+        cursor: pointer;
+        transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .btn-acao-social svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .btn-acao-social.ativo {
+        background-color: var(--roxo-medio);
+        border-color: var(--roxo-medio);
+        color: var(--branco);
+    }
+
+    .btn-acao-social.ativo svg {
+        fill: currentColor;
+    }
+
+    .btn-acao-social:focus-visible {
+        outline: 2px solid var(--roxo-medio);
+        outline-offset: 2px;
+    }
+
+    .btn-abrir-card-mobile,
+    .icone-ler-mobile {
+        margin-left: auto;
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: var(--nevoa-verde);
+        color: var(--verde-manguezal);
+        flex-shrink: 0;
+    }
+
+    .btn-abrir-card-mobile svg,
+    .icone-ler-mobile svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.1;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* 6. Próximos Encontros enxutos e prontos para o polegar */
+    .encontros {
+        padding: 1.5rem 0.95rem 2rem;
+        background: none;
+    }
+
+    .encontros-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    .encontros-intro {
+        min-width: 0;
+        max-width: 100%;
+        padding: 1.35rem 1.25rem;
+        border-radius: 22px;
+        gap: 0.65rem;
+    }
+
+    .encontros-intro h2 {
+        font-size: 1.5rem;
+    }
+
+    .encontros-descricao {
+        font-size: 0.86rem;
+    }
+
+    .encontros-intro .btn-claro {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.82rem;
+    }
+
+    .lista-encontros {
+        gap: 0.9rem;
+        min-width: 0;
+    }
+
+    .cartao-evento {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+        gap: 0.9rem;
+        min-width: 0;
+        max-width: 100%;
+        padding: 1.05rem;
+        border-radius: 22px;
+        box-shadow: 0 7px 20px rgba(52, 21, 57, 0.06);
+    }
+
+    .info-evento {
+        min-width: 0;
+    }
+
+    .data-evento {
+        min-width: 62px;
+        padding: 0.65rem 0.6rem;
+        border-radius: 15px;
+    }
+
+    .data-evento .dia {
+        font-size: 1.55rem;
+    }
+
+    .info-evento h3 {
+        font-size: 1.1rem;
+    }
+
+    .acao-evento {
+        display: none;
+    }
+
+    .acoes-evento-mobile {
+        grid-column: 1 / -1;
+        padding: 0.7rem 0 0;
+        margin-top: 0.15rem;
+    }
+
+    .link-detalhes-evento-mobile {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        min-height: 38px;
+        padding: 0 0.35rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--verde-manguezal);
+    }
+
+    /* 7. Página de Notícias (noticias.html) — Feed Social Mobile sem transbordo lateral */
+    .pagina-noticias,
+    .catalogo-noticias {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .pagina-noticias {
+        padding: 0.85rem 0.95rem 2rem;
+    }
+
+    .banner-noticias {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 1rem 1.1rem;
+        margin-bottom: 0.85rem;
+        border-radius: 20px;
+    }
+
+    .banner-noticias-icone {
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
+    }
+
+    .banner-noticias-textos {
+        min-width: 0;
+    }
+
+    .banner-noticias-textos h1 {
+        font-size: 1.45rem;
+        margin-bottom: 0;
+        overflow-wrap: break-word;
+    }
+
+    /* Oculta textos longos e marca d'água no celular para o feed subir à primeira dobra */
+    .banner-noticias-descricao,
+    .banner-marca-dagua {
+        display: none;
+    }
+
+    /* Grid minmax(0, 1fr) trava a largura em 100% da tela mesmo com pílulas horizontais */
+    .controles-noticias {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 0.85rem;
+        margin-bottom: 1.1rem;
+        border-radius: 18px;
+        overflow: visible;
+    }
+
+    .barra-ferramentas-noticias {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        min-width: 0;
+    }
+
+    .campo-busca-noticias,
+    .input-busca-noticias,
+    .seletor-ordenacao,
+    .gatilho-ordenacao {
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .menu-ordenacao {
+        left: 0;
+        right: 0;
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .linha-filtros-noticias {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.65rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .lista-pilulas {
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 0.15rem 0.05rem 0.35rem;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .lista-pilulas::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pilula-filtro {
+        flex-shrink: 0;
+        min-height: 40px;
+    }
+
+    .pilula-filtro-salvos {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.38rem;
+    }
+
+    .resumo-resultados-noticias {
+        min-width: 0;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .grid-catalogo-noticias {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .card-feed-noticia {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        border-radius: 22px;
+        box-shadow: 0 8px 22px rgba(52, 21, 57, 0.07);
+    }
+
+    .card-feed-midia {
+        aspect-ratio: 16 / 9;
+    }
+
+    .card-feed-corpo {
+        min-width: 0;
+        padding: 1rem 1.05rem 0.95rem;
+        gap: 0.5rem;
+    }
+
+    .card-feed-corpo h2,
+    .card-feed-resumo {
+        overflow-wrap: break-word;
+    }
+
+    .card-feed-corpo .categoria {
+        position: absolute;
+        top: 0.8rem;
+        left: 0.8rem;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(26, 32, 44, 0.16);
+    }
+
+    .card-feed-rodape {
+        order: -1;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+        font-size: 0.74rem;
+    }
+
+    .card-feed-acao {
+        display: none;
+    }
+
+    /* 8. Modal de Leitura como Bottom Sheet Ergonômico (arraste + barra inferior) */
+    .modal-noticia-backdrop {
+        z-index: 220;
+        align-items: end;
+        padding: 0;
+    }
+
+    .modal-noticia-caixa {
+        max-width: 100%;
+        max-height: 92vh;
+        max-height: 92dvh;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .modal-alca-mobile {
+        display: flex;
+        justify-content: center;
+        padding: 0.65rem 0 0.2rem;
+        background-color: var(--branco);
+        touch-action: none;
+    }
+
+    .modal-alca-mobile span {
+        display: block;
+        width: 42px;
+        height: 5px;
+        border-radius: 999px;
+        background-color: var(--lilas-acinzentado);
+    }
+
+    .modal-noticia-topo {
+        padding: 0.5rem 1.15rem 0.8rem;
+        touch-action: none;
+    }
+
+    .modal-acoes-mobile {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.75rem 1rem max(0.85rem, env(safe-area-inset-bottom, 0px));
+        border-top: 1px solid var(--nevoa-lilas);
+        background-color: var(--branco);
+    }
+
+    .btn-modal-voltar-feed {
+        margin-left: auto;
+        min-height: 42px;
+        padding: 0.55rem 1.1rem;
+        border: 0;
+        border-radius: 999px;
+        background-color: var(--verde-manguezal);
+        font-family: var(--fonte-principal);
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: var(--branco);
+        cursor: pointer;
+    }
+
+    .btn-modal-voltar-feed:focus-visible {
+        outline: 3px solid var(--roxo-medio);
+        outline-offset: 2px;
+    }
+
+    /* 9. Atalho Flutuante na Zona do Polegar (Topo / Buscar) */
+    .atalho-polegar-mobile {
+        position: fixed;
+        right: 0.95rem;
+        bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+        z-index: 150;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem;
+        border-radius: 999px;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--lilas-suave);
+        box-shadow: 0 10px 24px rgba(52, 21, 57, 0.16);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(12px);
+        transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .atalho-polegar-mobile.visivel {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .btn-polegar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        min-height: 38px;
+        padding: 0 0.85rem;
+        border: 0;
+        border-radius: 999px;
+        background-color: var(--verde-manguezal);
+        font-family: var(--fonte-principal);
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--branco);
+        cursor: pointer;
+    }
+
+    .btn-polegar-secundario {
+        background-color: var(--nevoa-lilas);
+        color: var(--roxo-escuro);
+    }
+
+    .btn-polegar svg {
+        width: 15px;
+        height: 15px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.1;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* 10. Barra de Navegação Inferior Fixa de 5 Abas (uso com 1 mão) */
+    .barra-navegacao-mobile {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 160;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: center;
+        gap: 0.15rem;
+        padding: 0.3rem 0.35rem max(0.45rem, env(safe-area-inset-bottom, 0px));
+        background-color: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(16px);
+        border-top: 1px solid var(--lilas-suave);
+        box-shadow: 0 -8px 26px rgba(52, 21, 57, 0.09);
+    }
+
+    .item-nav-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.2rem;
+        min-height: 52px;
+        padding: 0.25rem 0.15rem;
+        border-radius: 14px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--texto-suave);
+        transition: color 0.18s ease, background-color 0.18s ease;
+    }
+
+    .item-nav-mobile svg {
+        width: 21px;
+        height: 21px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .item-nav-mobile[aria-current="page"] {
+        background-color: var(--nevoa-verde);
+        color: var(--verde-manguezal);
+        font-weight: 700;
+    }
+
+    /* Toast posicionado acima da barra inferior mobile */
+    .toast-mobile {
+        bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Rodapé enxuto no mobile (já que os links principais estão na barra inferior) */
+    .cabecalho,
+    .rodape {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .rodape {
+        padding: 2rem 1rem 1.5rem;
+        gap: 1.1rem;
+        overflow: hidden;
+    }
+
+    .rodape-marca,
+    .rodape-marca > div {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .rodape-links {
+        display: none;
+    }
+}
+
+@media (max-width: 390px) {
+    .estatistica-numero {
+        font-size: 1.15rem;
+    }
+
+    .estatistica-rotulo {
+        font-size: 0.58rem;
+    }
+
+    .btn-acao-social {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.74rem;
     }
 }

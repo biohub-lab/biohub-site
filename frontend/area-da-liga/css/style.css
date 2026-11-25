@@ -4,8 +4,15 @@ padding: 0;
 box-sizing: border-box;
 }
 
+html {
+max-width: 100%;
+overflow-x: clip;
+}
+
 body {
 min-height: 100vh;
+max-width: 100%;
+overflow-x: clip;
 font-family: Arial, sans-serif;
 color: #303329;
 background: linear-gradient(135deg, #216651, #3E9278);
@@ -227,7 +234,114 @@ to {
 
 @media (max-width: 480px) {
 #login-panel {
-    padding: 36px 24px;
+    padding: 32px 22px;
+    border-radius: 22px;
+}
+}
+
+.link-voltar-portal {
+display: inline-flex;
+justify-content: center;
+align-items: center;
+gap: 6px;
+min-height: 44px;
+margin-top: 12px;
+color: #216651;
+font-size: 14px;
+font-weight: 600;
+text-decoration: none;
+}
+
+.link-voltar-portal:hover {
+text-decoration: underline;
+}
+
+.barra-navegacao-mobile {
+display: none;
+}
+
+@media (max-width: 768px) {
+body {
+    min-height: 100dvh;
+    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+}
+
+#login {
+    align-items: flex-start;
+    min-height: calc(100dvh - 74px);
+    padding: 20px 16px 28px;
+}
+
+#login-panel {
+    margin: auto 0;
+    gap: 24px;
+}
+
+/* Fonte 16px evita zoom automático ao tocar nos campos no celular */
+#matricula,
+#password {
+    min-height: 50px;
+    font-size: 16px;
+    border-radius: 12px;
+}
+
+#btn-login {
+    min-height: 50px;
+    border-radius: 999px;
+    font-size: 16px;
+}
+
+#visible-password {
+    min-height: 44px;
+    padding: 0 10px;
+}
+
+.barra-navegacao-mobile {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 160;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: center;
+    gap: 4px;
+    padding: 5px 6px max(8px, env(safe-area-inset-bottom, 0px));
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid #E9D7FA;
+    box-shadow: 0 -8px 26px rgba(52, 21, 57, 0.12);
+}
+
+.item-nav-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 52px;
+    padding: 4px 2px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4A5568;
+    text-decoration: none;
+}
+
+.item-nav-mobile svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.item-nav-mobile[aria-current="page"] {
+    background-color: #EEF4F0;
+    color: #005856;
+    font-weight: 700;
 }
 }
 

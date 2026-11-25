@@ -8,7 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const botoesFiltro = document.querySelectorAll('.pilula-filtro');
     const inputBusca = document.getElementById('busca-noticias');
     const botaoLimparBusca = document.getElementById('btn-limpar-busca');
-    const selectOrdenacao = document.getElementById('ordem-noticias');
+
+    const seletorOrdenacao = document.getElementById('seletor-ordenacao');
+    const botaoOrdenacao = document.getElementById('btn-ordem-noticias');
+    const textoOrdemAtual = document.getElementById('texto-ordem-atual');
+    const menuOrdenacao = document.getElementById('menu-ordem-noticias');
+    const opcoesOrdenacao = Array.from(document.querySelectorAll('.opcao-ordenacao'));
+
     const contadorNoticias = document.getElementById('contador-noticias');
     const botaoResetarFiltros = document.getElementById('btn-resetar-filtros');
 
@@ -19,7 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modal = document.getElementById('modal-noticia');
     const modalCaixa = modal ? modal.querySelector('.modal-noticia-caixa') : null;
+    const modalTopoArraste = modal ? modal.querySelector('.modal-noticia-topo') : null;
+    const modalAlcaArraste = modal ? modal.querySelector('.modal-alca-mobile') : null;
     const botaoFecharModal = document.getElementById('btn-fechar-modal');
+    const botaoModalVoltar = document.getElementById('btn-modal-voltar');
+    const botaoModalSalvar = document.getElementById('btn-modal-salvar');
+    const botaoModalCompartilhar = document.getElementById('btn-modal-compartilhar');
+
     const modalImagem = document.getElementById('modal-noticia-img');
     const modalCategoria = document.getElementById('modal-noticia-categoria');
     const modalMeta = document.getElementById('modal-noticia-meta');
@@ -36,10 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const estado = {
         categoria: 'todos',
         termoBusca: '',
-        ordenacao: selectOrdenacao ? selectOrdenacao.value : 'recentes'
+        ordenacao: 'recentes'
     };
 
     let ultimoElementoFocado = null;
+    let cartaoAbertoNoModal = null;
 
     // =========================================================
     // 2. FUNÇÕES UTILITÁRIAS (Texto sem acentos e datas ISO)
@@ -78,13 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         indiceCartoes.set(cartao, {
             indiceOriginal,
+            titulo,
+            resumo,
             timestamp: obterTimestampPublicacao(cartao),
             textoBusca: normalizarParaBusca(`${titulo} ${resumo} ${completo} ${categoriaRotulo}`)
         });
     });
 
     // =========================================================
-    // 3. BUSCA + FILTRO POR CATEGORIA + ORDENAÇÃO POR DATA
+    // 3. BUSCA + FILTRO POR CATEGORIA/SALVOS + ORDENAÇÃO POR DATA
     // =========================================================
     function atualizarBotaoCategoriaAtivo() {
         botoesFiltro.forEach((botao) => {
@@ -112,7 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contadorNoticias) {
             const rotuloOrdem = estado.ordenacao === 'antigas' ? 'mais antigas primeiro' : 'mais recentes primeiro';
             if (totalVisiveis === 0) {
-                contadorNoticias.textContent = 'Nenhuma notícia encontrada';
+                contadorNoticias.textContent = estado.categoria === 'salvos'
+                    ? 'Nenhuma notícia salva ainda'
+                    : 'Nenhuma notícia encontrada';
             } else if (totalVisiveis === 1) {
                 contadorNoticias.textContent = `Exibindo 1 notícia · ${rotuloOrdem}`;
             } else {
@@ -124,15 +141,25 @@ document.addEventListener('DOMContentLoaded', () => {
             mensagemVazio.hidden = totalVisiveis > 0;
 
             if (totalVisiveis === 0) {
-                if (mensagemVazioTitulo) {
-                    mensagemVazioTitulo.textContent = termoOriginal
-                        ? `Nenhum resultado para "${termoOriginal}"`
-                        : 'Nenhuma notícia encontrada nessa categoria';
-                }
-                if (mensagemVazioDetalhe) {
-                    mensagemVazioDetalhe.textContent = temCategoria && temBusca
-                        ? 'Experimente pesquisar em "Todos" ou usar palavras-chave mais gerais.'
-                        : 'Tente buscar por outro termo ou limpar os filtros ativos.';
+                if (estado.categoria === 'salvos' && !termoOriginal) {
+                    if (mensagemVazioTitulo) {
+                        mensagemVazioTitulo.textContent = 'Sua lista de salvos está vazia';
+                    }
+                    if (mensagemVazioDetalhe) {
+                        mensagemVazioDetalhe.textContent =
+                            'Toque em "Salvar" em qualquer publicação do feed para ler depois com facilidade.';
+                    }
+                } else {
+                    if (mensagemVazioTitulo) {
+                        mensagemVazioTitulo.textContent = termoOriginal
+                            ? `Nenhum resultado para "${termoOriginal}"`
+                            : 'Nenhuma notícia encontrada nessa categoria';
+                    }
+                    if (mensagemVazioDetalhe) {
+                        mensagemVazioDetalhe.textContent = temCategoria && temBusca
+                            ? 'Experimente pesquisar em "Todos" ou usar palavras-chave mais gerais.'
+                            : 'Tente buscar por outro termo ou limpar os filtros ativos.';
+                    }
                 }
             }
         }
@@ -151,17 +178,27 @@ document.addEventListener('DOMContentLoaded', () => {
             return dadosA.indiceOriginal - dadosB.indiceOriginal;
         });
 
-        // 2) Reinsere na ordem escolhida e avalia visibilidade (categoria + busca)
+        const salvosSet = new Set(
+            window.BioHubMobile ? window.BioHubMobile.obterSalvos() : []
+        );
+
+        // 2) Reinsere na ordem escolhida e avalia visibilidade (categoria/salvos + busca)
         let totalVisiveis = 0;
         const fragmento = document.createDocumentFragment();
 
         cartoesOrdenados.forEach((cartao) => {
             const categoriaDoCartao = cartao.dataset.categoria || '';
+            const idDoCartao = cartao.id || '';
             const dados = indiceCartoes.get(cartao);
 
-            const bateCategoria =
-                estado.categoria === 'todos' ||
-                categoriaDoCartao === estado.categoria;
+            let bateCategoria = false;
+            if (estado.categoria === 'todos') {
+                bateCategoria = true;
+            } else if (estado.categoria === 'salvos') {
+                bateCategoria = Boolean(idDoCartao) && salvosSet.has(idDoCartao);
+            } else {
+                bateCategoria = categoriaDoCartao === estado.categoria;
+            }
 
             const bateBusca =
                 estado.termoBusca === '' ||
@@ -185,21 +222,89 @@ document.addEventListener('DOMContentLoaded', () => {
         atualizarResumoEControles(totalVisiveis);
     }
 
+    const ROTULOS_ORDENACAO = {
+        recentes: 'Mais recentes primeiro',
+        antigas: 'Mais antigas primeiro'
+    };
+
+    function atualizarUIOrdenacao() {
+        const rotuloAtivo = ROTULOS_ORDENACAO[estado.ordenacao] || ROTULOS_ORDENACAO.recentes;
+
+        if (textoOrdemAtual) {
+            textoOrdemAtual.textContent = rotuloAtivo;
+        }
+
+        if (botaoOrdenacao) {
+            botaoOrdenacao.setAttribute('aria-label', `Ordenar por publicação: ${rotuloAtivo}`);
+        }
+
+        opcoesOrdenacao.forEach((opcao) => {
+            const ativo = (opcao.dataset.valor || 'recentes') === estado.ordenacao;
+            opcao.classList.toggle('ativo', ativo);
+            opcao.setAttribute('aria-selected', String(ativo));
+        });
+    }
+
+    function fecharMenuOrdenacao(devolverFoco = false) {
+        if (!menuOrdenacao || menuOrdenacao.hidden) return;
+        menuOrdenacao.hidden = true;
+        if (botaoOrdenacao) {
+            botaoOrdenacao.setAttribute('aria-expanded', 'false');
+            if (devolverFoco) {
+                botaoOrdenacao.focus();
+            }
+        }
+    }
+
+    function abrirMenuOrdenacao() {
+        if (!menuOrdenacao) return;
+        menuOrdenacao.hidden = false;
+        if (botaoOrdenacao) {
+            botaoOrdenacao.setAttribute('aria-expanded', 'true');
+        }
+        const opcaoSelecionada = opcoesOrdenacao.find(
+            (op) => (op.dataset.valor || 'recentes') === estado.ordenacao
+        );
+        if (opcaoSelecionada) {
+            opcaoSelecionada.focus();
+        }
+    }
+
     function resetarTodosFiltros() {
         estado.categoria = 'todos';
         estado.termoBusca = '';
         estado.ordenacao = 'recentes';
 
         if (inputBusca) inputBusca.value = '';
-        if (selectOrdenacao) selectOrdenacao.value = 'recentes';
+        fecharMenuOrdenacao(false);
+        atualizarUIOrdenacao();
 
         atualizarBotaoCategoriaAtivo();
         aplicarFiltrosEOrdenacao();
     }
 
     // =========================================================
-    // 4. MODAL DE LEITURA COMPLETA (com foco acessível)
+    // 4. MODAL DE LEITURA COMPLETA (Bottom Sheet + Gesto 1 Mão)
     // =========================================================
+    function sincronizarAcoesDoModal(cartao) {
+        if (!cartao) return;
+        const idCartao = cartao.id || '';
+        const dados = indiceCartoes.get(cartao);
+
+        if (botaoModalSalvar) {
+            botaoModalSalvar.dataset.itemId = idCartao;
+            if (window.BioHubMobile) {
+                window.BioHubMobile.sincronizarBotoesSalvar();
+            }
+        }
+
+        if (botaoModalCompartilhar && dados) {
+            botaoModalCompartilhar.dataset.shareTitulo = dados.titulo;
+            botaoModalCompartilhar.dataset.shareTexto = dados.resumo;
+            botaoModalCompartilhar.dataset.shareUrl = idCartao ? `noticias.html#${idCartao}` : 'noticias.html';
+        }
+    }
+
     function preencherModal(cartao) {
         const imagemCartao = cartao.querySelector('img');
         const categoriaCartao = cartao.querySelector('.categoria');
@@ -241,11 +346,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalCorpo.appendChild(novoParagrafo);
             });
         }
+
+        sincronizarAcoesDoModal(cartao);
     }
 
     function abrirModal(cartao) {
-        if (!modal) return;
+        if (!modal || !cartao) return;
 
+        cartaoAbertoNoModal = cartao;
         ultimoElementoFocado = document.activeElement;
         preencherModal(cartao);
 
@@ -254,10 +362,18 @@ document.addEventListener('DOMContentLoaded', () => {
             areaScroll.scrollTop = 0;
         }
 
+        if (modalCaixa) {
+            modalCaixa.style.transform = '';
+        }
+
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
 
-        if (botaoFecharModal) {
+        // Em telas móveis foca o botão inferior de voltar (zona do polegar)
+        const ehMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (ehMobile && botaoModalVoltar) {
+            botaoModalVoltar.focus();
+        } else if (botaoFecharModal) {
             botaoFecharModal.focus();
         }
     }
@@ -267,6 +383,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        cartaoAbertoNoModal = null;
+
+        if (modalCaixa) {
+            modalCaixa.style.transform = '';
+        }
+
+        if (window.location.hash && window.location.hash.startsWith('#noticia-')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
 
         if (ultimoElementoFocado && typeof ultimoElementoFocado.focus === 'function') {
             ultimoElementoFocado.focus();
@@ -278,9 +403,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const elementosFocaveis = modalCaixa.querySelectorAll(
-            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        );
+        const elementosFocaveis = Array.from(
+            modalCaixa.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            )
+        ).filter((el) => el.offsetParent !== null);
 
         if (elementosFocaveis.length === 0) return;
 
@@ -293,6 +420,56 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (!evento.shiftKey && document.activeElement === ultimo) {
             evento.preventDefault();
             primeiro.focus();
+        }
+    }
+
+    // Gesto de deslizar para baixo (swipe-down) na alça/topo do modal no celular
+    function configurarArrasteFecharModal() {
+        if (!modalCaixa) return;
+        const alvosArraste = [modalAlcaArraste, modalTopoArraste].filter(Boolean);
+        let inicioY = null;
+        let deltaAtualY = 0;
+
+        alvosArraste.forEach((alvo) => {
+            alvo.addEventListener('touchstart', (evento) => {
+                if (evento.touches.length !== 1) return;
+                inicioY = evento.touches[0].clientY;
+                deltaAtualY = 0;
+                modalCaixa.style.transition = 'none';
+            }, { passive: true });
+
+            alvo.addEventListener('touchmove', (evento) => {
+                if (inicioY === null) return;
+                const diferenca = evento.touches[0].clientY - inicioY;
+                if (diferenca > 0) {
+                    deltaAtualY = diferenca;
+                    modalCaixa.style.transform = `translateY(${Math.min(diferenca, 260)}px)`;
+                }
+            }, { passive: true });
+
+            alvo.addEventListener('touchend', () => {
+                if (inicioY === null) return;
+                modalCaixa.style.transition = '';
+                inicioY = null;
+
+                if (deltaAtualY > 75) {
+                    fecharModal();
+                } else {
+                    modalCaixa.style.transform = '';
+                }
+                deltaAtualY = 0;
+            });
+        });
+    }
+
+    // Abre notícia automaticamente quando vier da Home via #noticia-...
+    function verificarHashNoticia() {
+        const hash = window.location.hash ? window.location.hash.slice(1) : '';
+        if (!hash) return;
+
+        const cartaoAlvo = document.getElementById(hash);
+        if (cartaoAlvo && cartaoAlvo.classList.contains('card-feed-noticia')) {
+            abrirModal(cartaoAlvo);
         }
     }
 
@@ -323,12 +500,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (selectOrdenacao) {
-        selectOrdenacao.addEventListener('change', () => {
-            estado.ordenacao = selectOrdenacao.value || 'recentes';
-            aplicarFiltrosEOrdenacao();
+    if (botaoOrdenacao && menuOrdenacao) {
+        botaoOrdenacao.addEventListener('click', () => {
+            if (menuOrdenacao.hidden) {
+                abrirMenuOrdenacao();
+            } else {
+                fecharMenuOrdenacao(false);
+            }
+        });
+
+        botaoOrdenacao.addEventListener('keydown', (evento) => {
+            if (evento.key === 'ArrowDown' || evento.key === 'ArrowUp') {
+                evento.preventDefault();
+                abrirMenuOrdenacao();
+            }
         });
     }
+
+    opcoesOrdenacao.forEach((opcao, indice) => {
+        opcao.addEventListener('click', () => {
+            estado.ordenacao = opcao.dataset.valor || 'recentes';
+            atualizarUIOrdenacao();
+            fecharMenuOrdenacao(true);
+            aplicarFiltrosEOrdenacao();
+        });
+
+        opcao.addEventListener('keydown', (evento) => {
+            if (evento.key === 'Enter' || evento.key === ' ') {
+                evento.preventDefault();
+                estado.ordenacao = opcao.dataset.valor || 'recentes';
+                atualizarUIOrdenacao();
+                fecharMenuOrdenacao(true);
+                aplicarFiltrosEOrdenacao();
+                return;
+            }
+
+            if (evento.key === 'ArrowDown') {
+                evento.preventDefault();
+                const proxima = opcoesOrdenacao[(indice + 1) % opcoesOrdenacao.length];
+                if (proxima) proxima.focus();
+            } else if (evento.key === 'ArrowUp') {
+                evento.preventDefault();
+                const anterior = opcoesOrdenacao[(indice - 1 + opcoesOrdenacao.length) % opcoesOrdenacao.length];
+                if (anterior) anterior.focus();
+            } else if (evento.key === 'Tab') {
+                fecharMenuOrdenacao(false);
+            }
+        });
+    });
+
+    document.addEventListener('click', (evento) => {
+        if (seletorOrdenacao && !seletorOrdenacao.contains(evento.target)) {
+            fecharMenuOrdenacao(false);
+        }
+    });
 
     if (botaoResetarFiltros) {
         botaoResetarFiltros.addEventListener('click', resetarTodosFiltros);
@@ -343,6 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cartoesNoticia.forEach((cartao) => {
         cartao.addEventListener('click', (evento) => {
+            if (evento.target.closest('.btn-acao-social')) return;
             evento.preventDefault();
             abrirModal(cartao);
         });
@@ -350,6 +576,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (botaoFecharModal) {
         botaoFecharModal.addEventListener('click', fecharModal);
+    }
+
+    if (botaoModalVoltar) {
+        botaoModalVoltar.addEventListener('click', fecharModal);
     }
 
     if (modal) {
@@ -360,9 +590,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    document.addEventListener('biohub:salvos-alterados', () => {
+        if (estado.categoria === 'salvos') {
+            aplicarFiltrosEOrdenacao();
+        }
+        if (cartaoAbertoNoModal) {
+            sincronizarAcoesDoModal(cartaoAbertoNoModal);
+        }
+    });
+
     document.addEventListener('keydown', (evento) => {
         if (evento.key === 'Escape') {
-            if (modal && modal.getAttribute('aria-hidden') === 'false') {
+            if (menuOrdenacao && !menuOrdenacao.hidden) {
+                fecharMenuOrdenacao(true);
+            } else if (modal && modal.getAttribute('aria-hidden') === 'false') {
                 fecharModal();
             } else if (inputBusca && document.activeElement === inputBusca && inputBusca.value !== '') {
                 inputBusca.value = '';
@@ -375,6 +616,10 @@ document.addEventListener('DOMContentLoaded', () => {
         manterFocoNoModal(evento);
     });
 
-    // Inicializa ordenação (mais recentes primeiro) e numeração ao carregar
+    window.addEventListener('hashchange', verificarHashNoticia);
+
+    // Inicializa ordenação, suporte ao swipe-down e leitura via link direto
+    configurarArrasteFecharModal();
     aplicarFiltrosEOrdenacao();
+    verificarHashNoticia();
 });

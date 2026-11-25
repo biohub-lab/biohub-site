@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="BioHub: artigos científicos, notícias e encontros da Liga Acadêmica de Biotecnologia da UniALFA">
     <title>BioHub - Liga Acadêmica de Biotecnologia</title>
 
@@ -11,18 +11,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js" defer></script>
 </head>
 
 <body>
 
-    <!-- ===== FAIXA SUPERIOR (do colega) ===== -->
-    <div class="faixa-superior">
+    <!-- ===== FAIXA SUPERIOR (alvo não-sticky seguro da âncora #topo) ===== -->
+    <div class="faixa-superior" id="topo">
         <span class="ponto-verde" aria-hidden="true"></span>
         <strong>BioHub</strong>
         <span class="nome-faixa">Liga Acadêmica de Biotecnologia</span>
     </div>
 
-    <!-- ===== CABEÇALHO (seu, com a linha em degradê do colega) ===== -->
+    <!-- ===== CABEÇALHO PRINCIPAL ===== -->
     <header class="cabecalho">
         <a href="index.html" class="logo" aria-label="BioHub, ir para o início">
             <img src="img/Logo Oficial - BioHub.jpeg" alt="" class="logo-img">
@@ -38,13 +39,29 @@
             </ul>
         </nav>
 
-        <a href="area-da-liga/index.html" class="botao-area-liga">Área da Liga &rarr;</a>
+        <a href="area-da-liga/index.html" class="botao-area-liga" aria-label="Acessar Área da Liga">
+            <span class="texto-desktop-liga">Área da </span><span>Liga</span>
+            <span class="icone-seta-liga" aria-hidden="true">&rarr;</span>
+        </a>
     </header>
 
     <main>
 
-        <!-- ===== INÍCIO: fundo em degradê (seu) + card (do colega) ===== -->
-        <section class="hero" id="inicio">
+        <!-- ===== PÍLULAS DO FEED SOCIAL (visível em telas móveis para uso com 1 mão) ===== -->
+        <div class="chips-feed-mobile" role="group" aria-label="Filtrar destaques do seu feed">
+            <button type="button" class="chip-feed ativo" data-chip="todos" aria-pressed="true">Para você</button>
+            <button type="button" class="chip-feed" data-chip="pesquisa" aria-pressed="false">Pesquisa</button>
+            <button type="button" class="chip-feed" data-chip="campus" aria-pressed="false">Campus</button>
+            <button type="button" class="chip-feed" data-chip="eventos" aria-pressed="false">Eventos</button>
+            <button type="button" class="chip-feed chip-feed-salvos" data-chip="salvos" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                <span>Salvos</span>
+                <span class="badge-contador-salvos" data-contador-salvos hidden></span>
+            </button>
+        </div>
+
+        <!-- ===== INÍCIO: HERO ===== -->
+        <section class="hero" id="inicio" data-feed-tags="todos pesquisa">
             <div class="hero-card">
 
                 <div class="hero-conteudo">
@@ -94,8 +111,8 @@
             </div>
         </section>
 
-        <!-- ===== BARRA DE NÚMEROS (do colega, degradê mais suave) ===== -->
-        <section class="estatisticas" aria-label="A liga em números">
+        <!-- ===== BARRA DE NÚMEROS ===== -->
+        <section class="estatisticas" aria-label="A liga em números" data-feed-tags="todos">
             <ul class="lista-estatisticas">
                 <li class="estatistica">
                     <span class="estatistica-numero">24</span>
@@ -116,11 +133,18 @@
             </ul>
         </section>
 
-        <!-- ===== ÚLTIMAS NOTÍCIAS (seu) ===== -->
+        <!-- ===== ESTADO VAZIO DO FILTRO "SALVOS" NO FEED MOBILE ===== -->
+        <div class="feed-mobile-vazio" id="feed-home-vazio" hidden>
+            <p class="feed-mobile-vazio-titulo">Nenhum item salvo ainda</p>
+            <p class="feed-mobile-vazio-texto">Toque em <strong>Salvar</strong> nas publicações ou encontros do feed para acessá-los rapidamente com uma mão.</p>
+            <button type="button" class="btn-secundario" id="btn-home-para-voce">Voltar para Para você</button>
+        </div>
+
+        <!-- ===== ÚLTIMAS NOTÍCIAS / NO SEU FEED ===== -->
         <section class="noticias" id="noticias" aria-labelledby="titulo-noticias">
             <div class="cabecalho-secao">
                 <div>
-                    <p class="sobretitulo">Atualizações</p>
+                    <p class="sobretitulo">No seu feed &middot; Atualizações</p>
                     <h2 id="titulo-noticias">Últimas notícias</h2>
                 </div>
                 <a href="noticias.html" class="link-secao">Ver todas &rarr;</a>
@@ -128,8 +152,8 @@
 
             <div class="grid-noticias">
 
-                <article class="cartao-noticia destaque">
-                    <a href="noticias.html" class="cartao-noticia-link">
+                <article class="cartao-noticia destaque" data-item-id="noticia-congresso" data-feed-tags="todos pesquisa eventos">
+                    <a href="noticias.html#noticia-congresso" class="cartao-noticia-link">
                         <img src="img/Congresso de Biomedicina UniALFA.png" alt="Estudantes reunidos em um auditório durante um congresso">
                         <div class="cartao-noticia-corpo">
                             <span class="categoria categoria-congresso">Congresso</span>
@@ -138,10 +162,38 @@
                             <p class="meta"><time datetime="2026-10-10">10 out 2026</time></p>
                         </div>
                     </a>
+                    <div class="acoes-sociais-mobile" aria-label="Ações rápidas da publicação">
+                        <button
+                            type="button"
+                            class="btn-acao-social"
+                            data-acao="salvar"
+                            data-item-id="noticia-congresso"
+                            aria-pressed="false"
+                            aria-label="Salvar publicação: III Congresso de Biomedicina"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            <span class="rotulo-salvar">Salvar</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn-acao-social"
+                            data-acao="compartilhar"
+                            data-share-titulo="Inscrições abertas para o III Congresso de Biomedicina"
+                            data-share-texto="Submissão de trabalhos científicos até 20 de novembro."
+                            data-share-url="noticias.html#noticia-congresso"
+                            aria-label="Compartilhar publicação: III Congresso de Biomedicina"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                            <span>Compartilhar</span>
+                        </button>
+                        <a href="noticias.html#noticia-congresso" class="btn-abrir-card-mobile" aria-label="Ler notícia: III Congresso de Biomedicina">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                    </div>
                 </article>
 
-                <article class="cartao-noticia">
-                    <a href="noticias.html" class="cartao-noticia-link">
+                <article class="cartao-noticia" data-item-id="noticia-sala-estudos" data-feed-tags="todos campus">
+                    <a href="noticias.html#noticia-sala-estudos" class="cartao-noticia-link">
                         <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Estudantes caminhando em área verde do campus">
                         <div class="cartao-noticia-corpo">
                             <span class="categoria categoria-representacao">Representação</span>
@@ -149,10 +201,38 @@
                             <p class="meta"><time datetime="2026-10-08">08 out 2026</time></p>
                         </div>
                     </a>
+                    <div class="acoes-sociais-mobile" aria-label="Ações rápidas da publicação">
+                        <button
+                            type="button"
+                            class="btn-acao-social"
+                            data-acao="salvar"
+                            data-item-id="noticia-sala-estudos"
+                            aria-pressed="false"
+                            aria-label="Salvar publicação: Nova sala de estudos colaborativos"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            <span class="rotulo-salvar">Salvar</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn-acao-social"
+                            data-acao="compartilhar"
+                            data-share-titulo="Nova sala de estudos colaborativos é inaugurada no campus"
+                            data-share-texto="Confira o novo espaço de estudos colaborativos da UniALFA."
+                            data-share-url="noticias.html#noticia-sala-estudos"
+                            aria-label="Compartilhar publicação: Nova sala de estudos colaborativos"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                            <span>Compartilhar</span>
+                        </button>
+                        <a href="noticias.html#noticia-sala-estudos" class="btn-abrir-card-mobile" aria-label="Ler notícia: Nova sala de estudos colaborativos">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                    </div>
                 </article>
 
-                <article class="cartao-noticia">
-                    <a href="noticias.html" class="cartao-noticia-link">
+                <article class="cartao-noticia" data-item-id="noticia-processo-seletivo" data-feed-tags="todos campus">
+                    <a href="noticias.html#noticia-processo-seletivo" class="cartao-noticia-link">
                         <img src="img/Resultado do Processo Seletivo UniALFA 2026.2.png" alt="Aluna realizando pipetagem em laboratório">
                         <div class="cartao-noticia-corpo">
                             <span class="categoria categoria-liga">Liga acadêmica</span>
@@ -160,12 +240,40 @@
                             <p class="meta"><time datetime="2026-09-15">15 set 2026</time></p>
                         </div>
                     </a>
+                    <div class="acoes-sociais-mobile" aria-label="Ações rápidas da publicação">
+                        <button
+                            type="button"
+                            class="btn-acao-social"
+                            data-acao="salvar"
+                            data-item-id="noticia-processo-seletivo"
+                            aria-pressed="false"
+                            aria-label="Salvar publicação: Resultado do processo seletivo 2026.2"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            <span class="rotulo-salvar">Salvar</span>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn-acao-social"
+                            data-acao="compartilhar"
+                            data-share-titulo="Resultado do processo seletivo para novos membros 2026.2"
+                            data-share-texto="Confira os aprovados na seleção 2026.2 da Liga Acadêmica de Biotecnologia."
+                            data-share-url="noticias.html#noticia-processo-seletivo"
+                            aria-label="Compartilhar publicação: Resultado do processo seletivo 2026.2"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                            <span>Compartilhar</span>
+                        </button>
+                        <a href="noticias.html#noticia-processo-seletivo" class="btn-abrir-card-mobile" aria-label="Ler notícia: Resultado do processo seletivo 2026.2">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                    </div>
                 </article>
 
             </div>
         </section>
 
-        <!-- ===== PRÓXIMOS ENCONTROS (mistura dos dois) ===== -->
+        <!-- ===== PRÓXIMOS ENCONTROS ===== -->
         <section class="encontros" id="encontros" aria-labelledby="titulo-encontros">
             <div class="encontros-layout">
 
@@ -180,7 +288,7 @@
 
                 <div class="lista-encontros">
 
-                    <article class="cartao-evento">
+                    <article class="cartao-evento" data-item-id="evento-biomarcadores" data-feed-tags="todos pesquisa eventos">
                         <time datetime="2026-11-05" class="data-evento">
                             <span class="dia">05</span>
                             <span class="mes">NOV</span>
@@ -195,9 +303,37 @@
                             </ul>
                         </div>
                         <a href="encontros.html" class="acao-evento" aria-label="Ver detalhes: Biomarcadores no diagnóstico precoce do câncer">↗</a>
+                        <div class="acoes-evento-mobile">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="evento-biomarcadores"
+                                aria-pressed="false"
+                                aria-label="Salvar encontro: Biomarcadores no diagnóstico precoce do câncer"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Palestra: Biomarcadores no diagnóstico precoce do câncer"
+                                data-share-texto="05 NOV às 19h · Bloco C, Sala 12 — BioHub-LAB"
+                                data-share-url="index.html#encontros"
+                                aria-label="Compartilhar encontro: Biomarcadores no diagnóstico precoce do câncer"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <a href="encontros.html" class="link-detalhes-evento-mobile">
+                                Ver detalhes <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </div>
                     </article>
 
-                    <article class="cartao-evento">
+                    <article class="cartao-evento" data-item-id="evento-hematologia" data-feed-tags="todos pesquisa eventos">
                         <time datetime="2026-11-12" class="data-evento">
                             <span class="dia">12</span>
                             <span class="mes">NOV</span>
@@ -212,6 +348,34 @@
                             </ul>
                         </div>
                         <a href="encontros.html" class="acao-evento" aria-label="Ver detalhes: Hematologia clínica">↗</a>
+                        <div class="acoes-evento-mobile">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="evento-hematologia"
+                                aria-pressed="false"
+                                aria-label="Salvar encontro: Hematologia clínica"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Workshop: Hematologia clínica — casos práticos"
+                                data-share-texto="12 NOV às 20h · Online, Google Meet — BioHub-LAB"
+                                data-share-url="index.html#encontros"
+                                aria-label="Compartilhar encontro: Hematologia clínica"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <a href="encontros.html" class="link-detalhes-evento-mobile">
+                                Ver detalhes <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </div>
                     </article>
 
                 </div>
@@ -220,7 +384,38 @@
 
     </main>
 
-    <!-- ===== RODAPÉ (o melhor dos dois) ===== -->
+    <!-- ===== ATALHO FLUTUANTE NA ZONA DO POLEGAR (mobile) ===== -->
+    <div class="atalho-polegar-mobile" id="atalho-polegar-mobile">
+        <button type="button" class="btn-polegar" id="btn-polegar-topo" aria-label="Voltar ao topo do feed">
+            <span aria-hidden="true">&uarr;</span> Topo
+        </button>
+    </div>
+
+    <!-- ===== BARRA DE NAVEGAÇÃO INFERIOR FIXA (uso com 1 mão em telas menores) ===== -->
+    <nav class="barra-navegacao-mobile" aria-label="Navegação principal móvel">
+        <a href="index.html" class="item-nav-mobile" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5 10v10h14V10"/></svg>
+            <span>Início</span>
+        </a>
+        <a href="noticias.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <span>Notícias</span>
+        </a>
+        <a href="encontros.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+            <span>Encontros</span>
+        </a>
+        <a href="artigos.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>
+            <span>Artigos</span>
+        </a>
+        <a href="area-da-liga/index.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 3.5-7 8-7s7 2 8 7"/></svg>
+            <span>Liga</span>
+        </a>
+    </nav>
+
+    <!-- ===== RODAPÉ ===== -->
     <footer class="rodape">
 
         <div class="rodape-topo">
@@ -247,7 +442,7 @@
 
         <div class="rodape-final">
             <p class="direitos">&copy; 2026 Projeto BioHub &middot; Todos os Direitos Reservados</p>
-            <a href="#inicio" class="voltar-topo">Voltar ao topo &uarr;</a>
+            <a href="#topo" class="voltar-topo">Voltar ao topo &uarr;</a>
         </div>
 
     </footer>

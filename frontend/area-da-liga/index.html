@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="stylesheet" href="./css/style.css">
-    <title>Biohub</title>
+    <title>Área da Liga — BioHub-LAB</title>
 </head>
 <body>
-    
+
     <main id="main">
 
         <section id="login">
             <div id="login-panel">
                 <div id="logo">
-                    <img src="assets/logo.png" width="100" alt="Logo Biohub">
+                    <img src="assets/logo.png" width="100" alt="Logo BioHub">
                 </div>
                 <form action="" id="login-form">
                     <label for="matricula">Matrícula</label>
-                    <input type="number" name="matricula" id="matricula" autocomplete="username" required>
+                    <input type="number" name="matricula" id="matricula" inputmode="numeric" autocomplete="username" required>
                     <label for="password">Senha</label>
                     <div class="password-field">
                         <input type="password" name="password" id="password" autocomplete="current-password" required>
@@ -30,12 +29,37 @@
                         <span class="spinner" aria-hidden="true"></span>
                     </button>
                     <p id="login-message" role="status" aria-live="polite"></p>
-                    <p id="demo-footer">Biohub - Demonstração</p>
+                    <p id="demo-footer">BioHub - Demonstração</p>
+                    <a href="../index.html" class="link-voltar-portal">&larr; Voltar para o portal público</a>
                 </form>
             </div>
         </section>
 
     </main>
+
+    <!-- Barra de navegação inferior para troca rápida com uma mão no celular -->
+    <nav class="barra-navegacao-mobile" aria-label="Navegação principal móvel">
+        <a href="../index.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5 10v10h14V10"/></svg>
+            <span>Início</span>
+        </a>
+        <a href="../noticias.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <span>Notícias</span>
+        </a>
+        <a href="../encontros.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+            <span>Encontros</span>
+        </a>
+        <a href="../artigos.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>
+            <span>Artigos</span>
+        </a>
+        <a href="./index.html" class="item-nav-mobile" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 3.5-7 8-7s7 2 8 7"/></svg>
+            <span>Liga</span>
+        </a>
+    </nav>
 
     <script src="./js/script.js"></script>
 </body>

@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="Notícias, avisos oficiais, congressos e representação estudantil da Liga Acadêmica de Biotecnologia (LAB) da UniALFA.">
     <title>Notícias — BioHub-LAB</title>
 
@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js" defer></script>
     <script src="js/noticias.js" defer></script>
 </head>
 
@@ -39,7 +40,10 @@
             </ul>
         </nav>
 
-        <a href="area-da-liga/index.html" class="botao-area-liga">Área da Liga <span aria-hidden="true">&rarr;</span></a>
+        <a href="area-da-liga/index.html" class="botao-area-liga" aria-label="Acessar Área da Liga">
+            <span class="texto-desktop-liga">Área da </span><span>Liga</span>
+            <span class="icone-seta-liga" aria-hidden="true">&rarr;</span>
+        </a>
     </header>
 
     <!-- 3. CONTEÚDO PRINCIPAL DA PÁGINA DE NOTÍCIAS -->
@@ -82,7 +86,7 @@
                         type="search"
                         id="busca-noticias"
                         class="input-busca-noticias"
-                        placeholder="Buscar por título, palavra-chave ou assunto..."
+                        placeholder="Buscar no feed de notícias..."
                         autocomplete="off"
                     >
                     <button
@@ -94,22 +98,92 @@
                     >&times;</button>
                 </div>
 
-                <!-- Seletor de ordenação por data de publicação -->
-                <div class="campo-ordenacao-noticias">
-                    <label for="ordem-noticias" class="rotulo-ordenacao">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="m3 16 4 4 4-4"></path>
-                            <path d="M7 20V4"></path>
-                            <path d="M11 4h10"></path>
-                            <path d="M11 8h7"></path>
-                            <path d="M11 12h4"></path>
-                        </svg>
-                        <span>Publicação:</span>
-                    </label>
-                    <select id="ordem-noticias" class="select-ordenacao-noticias" aria-label="Ordenar notícias por data de publicação">
-                        <option value="recentes" selected>Mais recentes primeiro</option>
-                        <option value="antigas">Mais antigas primeiro</option>
-                    </select>
+                <!-- Seletor customizado de ordenação por data de publicação -->
+                <div class="seletor-ordenacao" id="seletor-ordenacao">
+                    <button
+                        type="button"
+                        class="gatilho-ordenacao"
+                        id="btn-ordem-noticias"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-controls="menu-ordem-noticias"
+                        aria-label="Ordenar por publicação: Mais recentes primeiro"
+                    >
+                        <span class="icone-gatilho-ordenacao" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m3 16 4 4 4-4"></path>
+                                <path d="M7 20V4"></path>
+                                <path d="M11 4h10"></path>
+                                <path d="M11 8h7"></path>
+                                <path d="M11 12h4"></path>
+                            </svg>
+                        </span>
+                        <span class="textos-gatilho-ordenacao">
+                            <span class="rotulo-gatilho-ordenacao">Publicação</span>
+                            <strong class="valor-gatilho-ordenacao" id="texto-ordem-atual">Mais recentes primeiro</strong>
+                        </span>
+                        <span class="seta-gatilho-ordenacao" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <ul
+                        class="menu-ordenacao"
+                        id="menu-ordem-noticias"
+                        role="listbox"
+                        aria-label="Ordenar notícias por data de publicação"
+                        hidden
+                    >
+                        <li
+                            class="opcao-ordenacao ativo"
+                            role="option"
+                            tabindex="-1"
+                            data-valor="recentes"
+                            aria-selected="true"
+                        >
+                            <span class="opcao-ordenacao-icone" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 19V5"></path>
+                                    <path d="m5 12 7-7 7 7"></path>
+                                </svg>
+                            </span>
+                            <span class="opcao-ordenacao-textos">
+                                <strong>Mais recentes primeiro</strong>
+                                <small>Últimas atualizações no topo</small>
+                            </span>
+                            <span class="opcao-ordenacao-check" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </span>
+                        </li>
+
+                        <li
+                            class="opcao-ordenacao"
+                            role="option"
+                            tabindex="-1"
+                            data-valor="antigas"
+                            aria-selected="false"
+                        >
+                            <span class="opcao-ordenacao-icone" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 5v14"></path>
+                                    <path d="m19 12-7 7-7-7"></path>
+                                </svg>
+                            </span>
+                            <span class="opcao-ordenacao-textos">
+                                <strong>Mais antigas primeiro</strong>
+                                <small>Ordem cronológica de publicação</small>
+                            </span>
+                            <span class="opcao-ordenacao-check" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -121,6 +195,11 @@
                     <button type="button" class="pilula-filtro" data-filtro="congresso" aria-pressed="false">Congresso</button>
                     <button type="button" class="pilula-filtro" data-filtro="representacao" aria-pressed="false">Representação</button>
                     <button type="button" class="pilula-filtro" data-filtro="avisos" aria-pressed="false">Avisos</button>
+                    <button type="button" class="pilula-filtro pilula-filtro-salvos" data-filtro="salvos" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        <span>Salvos</span>
+                        <span class="badge-contador-salvos" data-contador-salvos hidden></span>
+                    </button>
                 </div>
 
                 <div class="resumo-resultados-noticias">
@@ -135,12 +214,12 @@
 
         </section>
 
-        <!-- 3.3 CATÁLOGO DE NOTÍCIAS (3 colunas no desktop, 2 no tablet, 1 no celular) -->
+        <!-- 3.3 CATÁLOGO / FEED DE NOTÍCIAS -->
         <section class="catalogo-noticias" aria-label="Lista de notícias publicadas">
             <div class="grid-catalogo-noticias" id="grid-noticias-lista">
 
                 <!-- CARTÃO 01: Avisos (14 nov 2026) -->
-                <article class="card-feed-noticia" data-categoria="avisos" data-publicacao="2026-11-14">
+                <article class="card-feed-noticia" id="noticia-reunioes" data-categoria="avisos" data-publicacao="2026-11-14">
                     <figure class="card-feed-midia">
                         <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Estudantes reunidos em espaço colaborativo do campus da UniALFA">
                         <span class="card-feed-numero" aria-hidden="true">01</span>
@@ -149,7 +228,7 @@
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-avisos">Avisos</span>
                         <h2>
-                            <a href="#ler-noticia" class="link-abrir-noticia">
+                            <a href="#noticia-reunioes" class="link-abrir-noticia">
                                 Mudança no calendário de reuniões mensais de novembro
                             </a>
                         </h2>
@@ -168,11 +247,40 @@
                             </span>
                             <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
+
+                        <div class="acoes-sociais-noticia">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="noticia-reunioes"
+                                aria-pressed="false"
+                                aria-label="Salvar notícia: Mudança no calendário de reuniões mensais de novembro"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Mudança no calendário de reuniões mensais de novembro"
+                                data-share-texto="Confira os novos horários dos encontros administrativos da LAB."
+                                data-share-url="noticias.html#noticia-reunioes"
+                                aria-label="Compartilhar notícia: Mudança no calendário de reuniões mensais"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <span class="icone-ler-mobile" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARTÃO 02: Liga Acadêmica (04 nov 2026) -->
-                <article class="card-feed-noticia" data-categoria="liga" data-publicacao="2026-11-04">
+                <article class="card-feed-noticia" id="noticia-grupos-pesquisa" data-categoria="liga" data-publicacao="2026-11-04">
                     <figure class="card-feed-midia">
                         <img src="img/Gemini_Generated_Image_n9bl7xn9bl7xn9bl.jpg" alt="Pesquisador de jaleco analisando amostras em microscópio no laboratório" loading="lazy">
                         <span class="card-feed-numero" aria-hidden="true">02</span>
@@ -181,7 +289,7 @@
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-liga">Liga Acadêmica</span>
                         <h2>
-                            <a href="#ler-noticia" class="link-abrir-noticia">
+                            <a href="#noticia-grupos-pesquisa" class="link-abrir-noticia">
                                 LAB abre chamada para grupos de pesquisa aplicada em Biotecnologia
                             </a>
                         </h2>
@@ -200,11 +308,40 @@
                             </span>
                             <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
+
+                        <div class="acoes-sociais-noticia">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="noticia-grupos-pesquisa"
+                                aria-pressed="false"
+                                aria-label="Salvar notícia: LAB abre chamada para grupos de pesquisa"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="LAB abre chamada para grupos de pesquisa aplicada em Biotecnologia"
+                                data-share-texto="Inscreva-se nas frentes de diagnóstico molecular, microbiologia e genética."
+                                data-share-url="noticias.html#noticia-grupos-pesquisa"
+                                aria-label="Compartilhar notícia: LAB abre chamada para grupos de pesquisa"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <span class="icone-ler-mobile" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARTÃO 03: Congresso (10 out 2026 — alinhado com index.html) -->
-                <article class="card-feed-noticia" data-categoria="congresso" data-publicacao="2026-10-10">
+                <article class="card-feed-noticia" id="noticia-congresso" data-categoria="congresso" data-publicacao="2026-10-10">
                     <figure class="card-feed-midia">
                         <img src="img/Congresso de Biomedicina UniALFA.png" alt="Estudantes participando de palestra no auditório durante congresso acadêmico" loading="lazy">
                         <span class="card-feed-numero" aria-hidden="true">03</span>
@@ -213,7 +350,7 @@
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-congresso">Congresso</span>
                         <h2>
-                            <a href="#ler-noticia" class="link-abrir-noticia">
+                            <a href="#noticia-congresso" class="link-abrir-noticia">
                                 Inscrições abertas para o III Congresso de Biomedicina
                             </a>
                         </h2>
@@ -232,11 +369,40 @@
                             </span>
                             <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
+
+                        <div class="acoes-sociais-noticia">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="noticia-congresso"
+                                aria-pressed="false"
+                                aria-label="Salvar notícia: III Congresso de Biomedicina"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Inscrições abertas para o III Congresso de Biomedicina"
+                                data-share-texto="Palestras, minicursos práticos e submissão de trabalhos até 20 de novembro."
+                                data-share-url="noticias.html#noticia-congresso"
+                                aria-label="Compartilhar notícia: III Congresso de Biomedicina"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <span class="icone-ler-mobile" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARTÃO 04: Representação (08 out 2026 — alinhado com index.html) -->
-                <article class="card-feed-noticia" data-categoria="representacao" data-publicacao="2026-10-08">
+                <article class="card-feed-noticia" id="noticia-sala-estudos" data-categoria="representacao" data-publicacao="2026-10-08">
                     <figure class="card-feed-midia">
                         <img src="img/Espaço UniALFA de Estudo Colaborativo.png" alt="Área externa arborizada e espaço de convivência acadêmica no campus" loading="lazy">
                         <span class="card-feed-numero" aria-hidden="true">04</span>
@@ -245,7 +411,7 @@
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-representacao">Representação</span>
                         <h2>
-                            <a href="#ler-noticia" class="link-abrir-noticia">
+                            <a href="#noticia-sala-estudos" class="link-abrir-noticia">
                                 Nova sala de estudos colaborativos é inaugurada no campus
                             </a>
                         </h2>
@@ -264,11 +430,40 @@
                             </span>
                             <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
+
+                        <div class="acoes-sociais-noticia">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="noticia-sala-estudos"
+                                aria-pressed="false"
+                                aria-label="Salvar notícia: Nova sala de estudos colaborativos"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Nova sala de estudos colaborativos é inaugurada no campus"
+                                data-share-texto="Espaço dedicado para estudos e reuniões de ligas acadêmicas na UniALFA."
+                                data-share-url="noticias.html#noticia-sala-estudos"
+                                aria-label="Compartilhar notícia: Nova sala de estudos colaborativos"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <span class="icone-ler-mobile" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARTÃO 05: Avisos (28 set 2026) -->
-                <article class="card-feed-noticia" data-categoria="avisos" data-publicacao="2026-09-28">
+                <article class="card-feed-noticia" id="noticia-certificados" data-categoria="avisos" data-publicacao="2026-09-28">
                     <figure class="card-feed-midia">
                         <img src="img/Congresso de Biomedicina UniALFA.png" alt="Estudantes acompanhando apresentação científica em auditório universitário" loading="lazy">
                         <span class="card-feed-numero" aria-hidden="true">05</span>
@@ -277,7 +472,7 @@
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-avisos">Avisos</span>
                         <h2>
-                            <a href="#ler-noticia" class="link-abrir-noticia">
+                            <a href="#noticia-certificados" class="link-abrir-noticia">
                                 Orientações para validação de certificados e horas complementares
                             </a>
                         </h2>
@@ -296,11 +491,40 @@
                             </span>
                             <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
                         </div>
+
+                        <div class="acoes-sociais-noticia">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="noticia-certificados"
+                                aria-pressed="false"
+                                aria-label="Salvar notícia: Orientações para validação de certificados"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Orientações para validação de certificados e horas complementares"
+                                data-share-texto="Passo a passo para emitir e protocolar certificados da LAB."
+                                data-share-url="noticias.html#noticia-certificados"
+                                aria-label="Compartilhar notícia: Validação de certificados"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <span class="icone-ler-mobile" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARTÃO 06: Liga Acadêmica (15 set 2026 — alinhado com index.html) -->
-                <article class="card-feed-noticia" data-categoria="liga" data-publicacao="2026-09-15">
+                <article class="card-feed-noticia" id="noticia-processo-seletivo" data-categoria="liga" data-publicacao="2026-09-15">
                     <figure class="card-feed-midia">
                         <img src="img/Resultado do Processo Seletivo UniALFA 2026.2.png" alt="Estudante realizando procedimento com pipeta em bancada de laboratório" loading="lazy">
                         <span class="card-feed-numero" aria-hidden="true">06</span>
@@ -309,7 +533,7 @@
                     <div class="card-feed-corpo">
                         <span class="categoria categoria-liga">Liga Acadêmica</span>
                         <h2>
-                            <a href="#ler-noticia" class="link-abrir-noticia">
+                            <a href="#noticia-processo-seletivo" class="link-abrir-noticia">
                                 Resultado do processo seletivo para novos membros 2026.2
                             </a>
                         </h2>
@@ -327,6 +551,35 @@
                                 <time datetime="2026-09-15">15 set 2026</time> &middot; 2 min de leitura
                             </span>
                             <span class="card-feed-acao" aria-hidden="true">Ler <span class="card-feed-seta">&rarr;</span></span>
+                        </div>
+
+                        <div class="acoes-sociais-noticia">
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="salvar"
+                                data-item-id="noticia-processo-seletivo"
+                                aria-pressed="false"
+                                aria-label="Salvar notícia: Resultado do processo seletivo 2026.2"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                <span class="rotulo-salvar">Salvar</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn-acao-social"
+                                data-acao="compartilhar"
+                                data-share-titulo="Resultado do processo seletivo para novos membros 2026.2"
+                                data-share-texto="Confira a lista oficial de aprovados da LAB 2026.2."
+                                data-share-url="noticias.html#noticia-processo-seletivo"
+                                aria-label="Compartilhar notícia: Resultado do processo seletivo 2026.2"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                                <span>Compartilhar</span>
+                            </button>
+                            <span class="icone-ler-mobile" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
                         </div>
                     </div>
                 </article>
@@ -354,7 +607,7 @@
 
     </main>
 
-    <!-- 4. MODAL DE LEITURA DA NOTÍCIA COMPLETA -->
+    <!-- 4. MODAL DE LEITURA DA NOTÍCIA COMPLETA (Bottom Sheet com 1 mão no celular) -->
     <div
         class="modal-noticia-backdrop"
         id="modal-noticia"
@@ -364,6 +617,10 @@
         aria-labelledby="modal-noticia-titulo"
     >
         <div class="modal-noticia-caixa" role="document">
+            <div class="modal-alca-mobile" aria-hidden="true">
+                <span></span>
+            </div>
+
             <div class="modal-noticia-topo">
                 <span class="categoria" id="modal-noticia-categoria">Categoria</span>
 
@@ -389,10 +646,72 @@
                     Para mais detalhes sobre esta atualização, acompanhe os comunicados oficiais no mural do curso de Biomedicina ou entre em contato com a diretoria da Liga Acadêmica de Biotecnologia (LAB) pelo perfil oficial <strong>@lab-unialfa</strong>.
                 </p>
             </div>
+
+            <!-- Barra inferior na zona do polegar para fechar/salvar/compartilhar com 1 mão -->
+            <div class="modal-acoes-mobile">
+                <button
+                    type="button"
+                    class="btn-acao-social"
+                    id="btn-modal-salvar"
+                    data-acao="salvar"
+                    data-item-id=""
+                    aria-pressed="false"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <span class="rotulo-salvar">Salvar</span>
+                </button>
+                <button
+                    type="button"
+                    class="btn-acao-social"
+                    id="btn-modal-compartilhar"
+                    data-acao="compartilhar"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                    <span>Compartilhar</span>
+                </button>
+                <button type="button" class="btn-modal-voltar-feed" id="btn-modal-voltar">
+                    Voltar ao feed
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- 5. RODAPÉ INSTITUCIONAL -->
+    <!-- 5. ATALHO FLUTUANTE NA ZONA DO POLEGAR (Buscar + Topo no celular) -->
+    <div class="atalho-polegar-mobile" id="atalho-polegar-mobile">
+        <button type="button" class="btn-polegar btn-polegar-secundario" id="btn-polegar-busca" aria-label="Ir para a busca">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span>Buscar</span>
+        </button>
+        <button type="button" class="btn-polegar" id="btn-polegar-topo" aria-label="Voltar ao topo do feed">
+            <span aria-hidden="true">&uarr;</span> Topo
+        </button>
+    </div>
+
+    <!-- 6. BARRA DE NAVEGAÇÃO INFERIOR FIXA (uso com 1 mão em telas menores) -->
+    <nav class="barra-navegacao-mobile" aria-label="Navegação principal móvel">
+        <a href="index.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5 10v10h14V10"/></svg>
+            <span>Início</span>
+        </a>
+        <a href="noticias.html" class="item-nav-mobile" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <span>Notícias</span>
+        </a>
+        <a href="encontros.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+            <span>Encontros</span>
+        </a>
+        <a href="artigos.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>
+            <span>Artigos</span>
+        </a>
+        <a href="area-da-liga/index.html" class="item-nav-mobile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 3.5-7 8-7s7 2 8 7"/></svg>
+            <span>Liga</span>
+        </a>
+    </nav>
+
+    <!-- 7. RODAPÉ INSTITUCIONAL -->
     <footer class="rodape">
         <div class="rodape-topo">
             <div class="rodape-marca">
