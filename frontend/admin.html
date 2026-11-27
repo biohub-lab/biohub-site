@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#022E2D">
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/area.css">
+    <title>Gerenciar membros - BioHub</title>
+</head>
+<body>
+    <div class="topbar">
+        <span class="status-dot" aria-hidden="true"></span>
+        <strong>BioHub</strong>
+        <span class="topbar-description">Liga Acadêmica de Biotecnologia</span>
+    </div>
+
+    <header class="site-header">
+        <a class="brand" href="painel.html" aria-label="BioHub">
+            <img src="img/logo-login.png" alt="" class="brand-logo">
+            <span class="brand-name">BioHub</span>
+        </a>
+        <div class="header-user">
+            <span class="quem" id="quem" hidden></span>
+            <button type="button" class="btn btn-sec btn-pequeno" id="btn-sair" hidden>Sair</button>
+        </div>
+    </header>
+
+    <main class="area-page">
+        <section class="area-card" id="cartao-carregando">
+            <p class="area-sub" id="carregando-texto">Verificando seu acesso...</p>
+        </section>
+
+        <div id="conteudo" hidden>
+            <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+
+            <section class="area-card">
+                <h2>Cadastrar novo membro</h2>
+                <p class="area-sub">O membro entra com a matrícula e a senha que você definir aqui.</p>
+                <form id="form-novo" class="form-grid" novalidate>
+                    <div class="field"><label for="n-nome">Nome</label><input id="n-nome" type="text" autocomplete="off" required></div>
+                    <div class="field"><label for="n-matricula">Matrícula</label><input id="n-matricula" type="text" inputmode="numeric" autocomplete="off" required></div>
+                    <div class="field"><label for="n-senha">Senha inicial (mín. 6)</label><input id="n-senha" type="text" autocomplete="off" required></div>
+                    <div class="field"><label for="n-papel">Papel</label>
+                        <select id="n-papel"><option value="membro">Membro</option><option value="admin">Admin</option></select>
+                    </div>
+                    <div class="form-acoes"><button class="btn" type="submit" id="btn-cadastrar">Cadastrar</button></div>
+                </form>
+            </section>
+
+            <section class="area-card">
+                <h2>Membros da liga</h2>
+                <p class="area-sub">Desativar não apaga ninguém: a pessoa só perde o acesso, e você pode reativar depois.</p>
+                <div class="tabela-wrap">
+                    <table>
+                        <thead><tr><th>Nome</th><th>Matrícula</th><th>Papel</th><th>Situação</th><th>Ações</th></tr></thead>
+                        <tbody id="corpo-tabela"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <dialog id="dlg-senha">
+        <form method="dialog" id="form-senha">
+            <h2 id="dlg-titulo">Redefinir senha</h2>
+            <div class="field"><label for="s-nova">Nova senha (mín. 6)</label><input id="s-nova" type="text" autocomplete="off" required></div>
+            <div class="dlg-acoes">
+                <button type="button" class="btn btn-sec" id="dlg-cancelar">Cancelar</button>
+                <button type="submit" class="btn" id="dlg-salvar">Salvar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>

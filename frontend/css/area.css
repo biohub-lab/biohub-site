@@ -1,0 +1,75 @@
+/* Páginas logadas (painel e admin). Usa as variáveis e o topo do login.css */
+.area-page {
+    min-height: calc(100vh - 124px);
+    padding: 2.5rem max(1.5rem, calc((100% - 1160px) / 2)) 3rem;
+    background: linear-gradient(135deg, #cfd2ff 0%, var(--lavender) 50%, #d0e0d3 100%) fixed;
+}
+.header-user { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
+.header-user .quem { color: var(--purple-deep); font-weight: 600; font-size: 0.9rem; }
+
+.area-card {
+    margin: 0 0 1.5rem;
+    padding: 1.75rem;
+    border: 1px solid var(--lavender);
+    border-radius: 24px;
+    background: var(--white);
+    box-shadow: 0 14px 30px rgb(52 21 57 / 12%);
+}
+.area-card h1, .area-card h2 { margin: 0 0 0.4rem; color: #341539; font-family: var(--font-heading); font-weight: 600; }
+.area-card h1 { font-size: clamp(1.7rem, 4vw, 2.2rem); }
+.area-card h2 { font-size: 1.35rem; }
+.area-sub { margin: 0 0 1.25rem; color: var(--text-muted); }
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+    min-height: 44px; padding: 0.6rem 1.3rem; border: 2px solid transparent; border-radius: 999px;
+    background: var(--green); color: var(--white); font-weight: 700; text-decoration: none;
+    transition: background-color 180ms ease;
+}
+.btn:hover:not(:disabled) { background: var(--green-hover); }
+.btn:disabled { opacity: 0.6; cursor: wait; }
+.btn-sec { background: var(--lavender-pale); border-color: var(--lavender); color: var(--purple-deep); }
+.btn-sec:hover:not(:disabled) { background: var(--lavender); }
+.btn-perigo { background: #fff1f0; border-color: #ffaaa3; color: #a92319; }
+.btn-perigo:hover:not(:disabled) { background: #ffe0dd; }
+.btn-pequeno { min-height: 36px; padding: 0.3rem 0.95rem; font-size: 0.85rem; }
+
+.badge { display: inline-block; padding: 0.15rem 0.7rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+.badge-admin { background: var(--lavender); color: var(--purple-deep); }
+.badge-membro { background: var(--green-pale); color: var(--green-deep); }
+.badge-ativo { background: var(--green-pale); color: var(--green-deep); }
+.badge-inativo { background: #fff1f0; color: #a92319; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; align-items: end; }
+.field select {
+    width: 100%; min-height: 56px; padding: 0.85rem 1rem; border: 2px solid var(--purple-muted);
+    border-radius: 14px; background: var(--white); color: var(--text); font-size: 1rem;
+}
+.field select:focus-visible { border-color: var(--purple); box-shadow: 0 0 0 4px var(--lavender); outline: none; }
+.form-acoes { margin-top: 1.25rem; }
+
+.aviso {
+    margin: 0 0 1.25rem; padding: 0.85rem 1rem; border: 2px solid transparent; border-radius: 14px;
+    font-weight: 600; line-height: 1.45;
+}
+.aviso[hidden] { display: none; }
+.aviso.is-success { border-color: #b8d8c0; background: var(--green-pale); color: var(--green-deep); }
+.aviso.is-error { border-color: #ffaaa3; background: #fff1f0; color: #a92319; }
+.aviso.is-info { border-color: var(--lavender); background: var(--lavender-pale); color: var(--purple-deep); }
+
+.tabela-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th, td { padding: 0.75rem 0.6rem; border-bottom: 1px solid var(--lavender); text-align: left; vertical-align: middle; }
+th { color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+td.acoes { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+tr.desativado td:not(.acoes) { color: #6b7280; }
+
+dialog { width: min(92vw, 420px); padding: 1.5rem; border: 1px solid var(--lavender); border-radius: 20px; }
+dialog::backdrop { background: rgb(26 32 44 / 45%); }
+dialog form { display: flex; flex-direction: column; gap: 1rem; }
+dialog .dlg-acoes { display: flex; gap: 0.6rem; justify-content: flex-end; }
+
+@media (max-width: 600px) {
+    .area-page { padding: 1.5rem 1rem 2rem; }
+    .area-card { padding: 1.25rem; }
+}

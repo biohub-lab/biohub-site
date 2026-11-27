@@ -1,6 +1,9 @@
-# Segredos: NUNCA subir GENTE E SERIO NAO SUBAO ISSO
+# Segredos: NUNCA SUBIR ISTA GALERA
 .env
 *.env
+# chave baixada do Firebase (conta de serviço)
+*firebase-adminsdk*.json
+serviceAccount*.json
 # Lixo do Python / Vercel
 __pycache__/
 *.pyc
