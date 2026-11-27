@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste da API - BioHub</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #1b2a22; }
+        h1 { font-size: 1.4rem; }
+        button { padding: .6rem 1rem; border: 0; border-radius: 8px; background: #2f7d57; color: #fff; font-size: 1rem; cursor: pointer; margin-right: .5rem; }
+        button.sec { background: #e3efe8; color: #1b2a22; }
+        #status { margin: 1rem 0 .5rem; font-weight: 600; }
+        #status.ok { color: #2f7d57; }
+        #status.erro { color: #b3261e; }
+        pre { background: #f4f7f5; border: 1px solid #d6e2db; border-radius: 8px; padding: 1rem; overflow-x: auto; min-height: 5rem; }
+    </style>
+</head>
+<body>
+    <h1>Teste da API (front → Flask → Supabase)</h1>
+    <p>Página só de teste. Clique e veja o JSON que o servidor devolve.</p>
+
+    <button id="btn-posts">Buscar posts (/api/posts)</button>
+    <button id="btn-health" class="sec">Testar servidor (/api/health)</button>
+
+    <p id="status">Nada chamado ainda.</p>
+    <pre id="saida"></pre>
+
+    <script src="js/teste-api.js"></script>
+</body>
+</html>

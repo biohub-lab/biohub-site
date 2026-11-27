@@ -1,0 +1,8 @@
+# Segredos: NUNCA subir GENTE E SERIO NAO SUBAO ISSO
+.env
+*.env
+# Lixo do Python / Vercel
+__pycache__/
+*.pyc
+.venv/
+.vercel/
