@@ -39,7 +39,7 @@ function mensagemDoFirebase(codigo) {
         case "auth/too-many-requests":
             return "Muitas tentativas. Espere alguns minutos e tente de novo.";
         case "auth/network-request-failed":
-            return "Sem conexão com a internet. Tente de novo.";
+            return "Não consegui falar com o servidor de login do Google. Verifique a internet, desative bloqueadores (adblock/VPN) ou teste numa aba anônima.";
         default:
             return "Não foi possível entrar agora. Tente de novo em instantes.";
     }
@@ -75,8 +75,15 @@ form.addEventListener("submit", async (evento) => {
         await signInWithEmailAndPassword(auth, matriculaParaEmail(matricula), senha);
     } catch (erro) {
         carregando(false);
-        marcarInvalido(campoMatricula, campoSenha);
-        return mostrarMensagem("error", mensagemDoFirebase(erro.code));
+        console.error("Falha no login (Firebase):", erro.code, erro.message, erro);
+        // Só pinta os campos de vermelho quando o problema é mesmo matrícula/senha
+        const erroDeCredencial = [
+            "auth/invalid-credential", "auth/wrong-password",
+            "auth/user-not-found", "auth/invalid-email",
+        ].includes(erro.code);
+        if (erroDeCredencial) marcarInvalido(campoMatricula, campoSenha); else marcarInvalido();
+        const detalhe = erroDeCredencial ? "" : " (código: " + (erro.code || "desconhecido") + ")";
+        return mostrarMensagem("error", mensagemDoFirebase(erro.code) + detalhe);
     }
 
     try {

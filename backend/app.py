@@ -1,4 +1,24 @@
-
+# ============================================================
+# API Flask do BioHub-LAB
+#
+# Rotas públicas
+#   /api               boas-vindas
+#   /api/health        prova que o Flask está rodando (não usa banco)
+#   /api/posts         lê a tabela "posts" do Supabase
+# Rotas de quem está logado (header  Authorization: Bearer <token do Firebase>)
+#   /api/me                                  quem sou eu (nome, papel...)
+# Rotas só de admin
+#   GET   /api/admin/usuarios                lista membros
+#   POST  /api/admin/usuarios                cadastra membro (cria no Firebase + Supabase)
+#   PATCH /api/admin/usuarios/<uid>/ativo    desativa / reativa membro
+#   POST  /api/admin/usuarios/<uid>/senha    redefine a senha de um membro
+#
+# Como o login funciona:
+#   1) o front entra no Firebase (matricula@biohub-lab.app + senha) e ganha um token;
+#   2) manda o token pra cá; o Flask confere com o Firebase se ele é de verdade;
+#   3) pelo uid do token, procura a pessoa na tabela "usuarios" do Supabase
+#      e só deixa passar se ativo = true (o papel diz se é membro ou admin).
+# ============================================================
 import json
 import os
 import re
@@ -10,18 +30,24 @@ from firebase_admin import auth as firebase_auth
 from firebase_admin import credentials
 from flask import Flask, g, jsonify, request
 from flask_cors import CORS
+from werkzeug.exceptions import HTTPException
 from supabase import create_client
 
-# USE ISTO APENAS SE FOR USAR LOCALMENTE
-# AS DEMAINS VARIAVEIS DE AMBIENTE ESTAO NA VERCEL.
+# Lê o .env (só existe na sua máquina). Na Vercel as variáveis vêm das configurações.
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  
+CORS(app)  # o front (outra origem, tipo Live Server) pode chamar a API
 
 DOMINIO_EMAIL = "biohub-lab.app"   # e-mail interno: matricula@biohub-lab.app
 PAPEIS = ("membro", "admin")
-TAMANHO_MIN_SENHA = 6              #
+TAMANHO_MIN_SENHA = 6              # mínimo do Firebase
+
+
+# ------------------------------------------------------------
+# Clientes (criados só quando alguém precisa, pra uma variável
+# faltando não derrubar a API inteira)
+# ------------------------------------------------------------
 _supabase_publico = None
 _supabase_admin = None
 
@@ -55,14 +81,19 @@ def iniciar_firebase():
     bruto = (os.getenv("FIREBASE_SERVICE_ACCOUNT") or "").strip()
     if not bruto:
         raise RuntimeError("Falta FIREBASE_SERVICE_ACCOUNT nas variáveis de ambiente")
+    if len(bruto) >= 2 and bruto[0] == bruto[-1] and bruto[0] in "'\"":
+        bruto = bruto[1:-1].strip()  # tira aspas coladas junto com o JSON
     if bruto.startswith("{"):
-        
+        # strict=False tolera quebras de linha "de verdade" dentro da private_key
         cred = credentials.Certificate(json.loads(bruto, strict=False))
     else:
         cred = credentials.Certificate(bruto)  # caminho do arquivo .json
     firebase_admin.initialize_app(cred)
 
 
+# ------------------------------------------------------------
+# Erros em JSON (o front lê "mensagem" e "codigo")
+# ------------------------------------------------------------
 class ErroApi(Exception):
     def __init__(self, mensagem, status=400, codigo=None):
         super().__init__(mensagem)
@@ -81,6 +112,20 @@ def tratar_config_faltando(erro):
     return jsonify(mensagem=str(erro), codigo="CONFIG"), 500
 
 
+@app.errorhandler(Exception)
+def tratar_erro_inesperado(erro):
+    if isinstance(erro, HTTPException):  # 404, 405... continuam com o código certo
+        return jsonify(mensagem=erro.description, codigo="HTTP"), erro.code
+    app.logger.exception("Erro inesperado")  # o traceback aparece nos Logs da Vercel
+    resposta = {"mensagem": "Erro interno do servidor.", "codigo": "INTERNO"}
+    if os.getenv("API_DEBUG") == "1":  # só pra depurar: mostra o tipo e o texto do erro
+        resposta["detalhe"] = f"{type(erro).__name__}: {str(erro)[:300]}"
+    return jsonify(resposta), 500
+
+
+# ------------------------------------------------------------
+# Quem está chamando? (valida token + confere cadastro e "ativo")
+# ------------------------------------------------------------
 def identificar_usuario():
     cabecalho = request.headers.get("Authorization", "")
     if not cabecalho.startswith("Bearer ") or not cabecalho[7:].strip():
@@ -153,11 +198,8 @@ def corpo_json():
 
 
 # ------------------------------------------------------------
-
 # Rotas públicas
-
 # ------------------------------------------------------------
-
 @app.route("/api")
 def home():
     return jsonify(mensagem="Bem vindo a API da LAB")
@@ -180,9 +222,7 @@ def listar_posts():
 
 
 # ------------------------------------------------------------
-
-# CODIGO PARA JA LOGADO
-
+# Logado
 # ------------------------------------------------------------
 @app.get("/api/me")
 @exige_login
@@ -191,11 +231,8 @@ def quem_sou_eu():
 
 
 # ------------------------------------------------------------
-
-# AREA DE ADMIN
-
+# Admin
 # ------------------------------------------------------------
-
 @app.get("/api/admin/usuarios")
 @exige_admin
 def listar_usuarios():
@@ -252,14 +289,14 @@ def mudar_ativo(uid):
     if not resposta.data:
         raise ErroApi("Membro não encontrado.", 404)
 
-    # Também liga/desliga no Firebase
+    # Também liga/desliga no Firebase e derruba sessões abertas de quem foi desativado
     iniciar_firebase()
     try:
         firebase_auth.update_user(uid, disabled=not ativo)
         if not ativo:
             firebase_auth.revoke_refresh_tokens(uid)
     except firebase_auth.UserNotFoundError:
-        pass
+        pass  # existe só no banco; o "ativo" já foi atualizado lá
     return jsonify(mostrar(resposta.data[0]))
 
 

@@ -1,5 +1,5 @@
 // Config do app web do Firebase (projeto biohub-lab).
-// Esses valores são públicos por natureza.
+// Esses valores são públicos por natureza (identificam o projeto, não dão acesso).
 // O que é SEGREDO é a chave de conta de serviço, que fica só no backend.
 export const firebaseConfig = {
     apiKey: "AIzaSyAVttDb-wxMBJC9ESe-LyMlA2Lmrm_BlVg",

@@ -4,8 +4,8 @@ import { auth, chamarApi, esperarUsuario, ApiErro } from "./api.js";
 const $ = (seletor) => document.querySelector(seletor);
 const irParaLogin = (motivo) => location.replace("area-da-liga.html" + (motivo ? "?motivo=" + motivo : ""));
 
-let euMesmo = null;       
-let uidDaSenha = null;    
+let euMesmo = null;       // quem está logado
+let uidDaSenha = null;    // de quem é a senha que o diálogo está redefinindo
 
 function avisar(tipo, texto) {
     const caixa = $("#aviso");
@@ -25,7 +25,7 @@ function tratarErro(erro) {
 
 function celula(texto) {
     const td = document.createElement("td");
-    td.textContent = texto;     
+    td.textContent = texto;     // textContent: nome com "<" ou HTML não vira código
     return td;
 }
 
